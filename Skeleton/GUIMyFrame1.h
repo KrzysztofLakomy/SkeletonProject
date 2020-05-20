@@ -24,7 +24,6 @@ class GUIMyFrame1 : public MyFrame1
 		void m_panel2OnPaint( wxPaintEvent& event );
 		void m_panel2OnUpdateUI( wxUpdateUIEvent& event );
 		void m_slider4OnScroll( wxScrollEvent& event );
-		void m_slider20OnScroll( wxScrollEvent& event );
 	public:
 		/** Constructor */
 		GUIMyFrame1( wxWindow* parent );
@@ -38,6 +37,7 @@ class GUIMyFrame1 : public MyFrame1
 		double alpha = 0.0;
 		double beta = 0.0;
 		bool is_panel_clicked = false;
+
 
 };
 

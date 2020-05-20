@@ -40,7 +40,7 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_slider7 = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer3->Add( m_slider7, 0, wxALL, 5 );
 
-	m_staticText10 = new wxStaticText( this, wxID_ANY, wxT("Left Arm "), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText10 = new wxStaticText( this, wxID_ANY, wxT("Left Arm Side"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText10->Wrap( -1 );
 	bSizer3->Add( m_staticText10, 0, wxALIGN_CENTER|wxALL, 5 );
 
@@ -134,13 +134,6 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_staticText18->Wrap( -1 );
 	bSizer7->Add( m_staticText18, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider20 = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
-	bSizer7->Add( m_slider20, 0, wxALL, 5 );
-
-	m_staticText25 = new wxStaticText( this, wxID_ANY, wxT("Rotation"), wxDefaultPosition, wxDefaultSize, 0 );
-	m_staticText25->Wrap( -1 );
-	bSizer7->Add( m_staticText25, 0, wxALIGN_CENTER|wxALL, 5 );
-
 
 	bSizer1->Add( bSizer7, 0, wxEXPAND, 5 );
 
@@ -165,15 +158,6 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_slider4->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
 	m_slider4->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
 	m_slider4->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_slider20->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( MyFrame1::m_slider20OnScroll ), NULL, this );
-	m_slider20->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( MyFrame1::m_slider20OnScroll ), NULL, this );
-	m_slider20->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( MyFrame1::m_slider20OnScroll ), NULL, this );
-	m_slider20->Connect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( MyFrame1::m_slider20OnScroll ), NULL, this );
-	m_slider20->Connect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( MyFrame1::m_slider20OnScroll ), NULL, this );
-	m_slider20->Connect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( MyFrame1::m_slider20OnScroll ), NULL, this );
-	m_slider20->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( MyFrame1::m_slider20OnScroll ), NULL, this );
-	m_slider20->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( MyFrame1::m_slider20OnScroll ), NULL, this );
-	m_slider20->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( MyFrame1::m_slider20OnScroll ), NULL, this );
 }
 
 MyFrame1::~MyFrame1()
@@ -193,14 +177,5 @@ MyFrame1::~MyFrame1()
 	m_slider4->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
 	m_slider4->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
 	m_slider4->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_slider20->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( MyFrame1::m_slider20OnScroll ), NULL, this );
-	m_slider20->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( MyFrame1::m_slider20OnScroll ), NULL, this );
-	m_slider20->Disconnect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( MyFrame1::m_slider20OnScroll ), NULL, this );
-	m_slider20->Disconnect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( MyFrame1::m_slider20OnScroll ), NULL, this );
-	m_slider20->Disconnect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( MyFrame1::m_slider20OnScroll ), NULL, this );
-	m_slider20->Disconnect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( MyFrame1::m_slider20OnScroll ), NULL, this );
-	m_slider20->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( MyFrame1::m_slider20OnScroll ), NULL, this );
-	m_slider20->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( MyFrame1::m_slider20OnScroll ), NULL, this );
-	m_slider20->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( MyFrame1::m_slider20OnScroll ), NULL, this );
 
 }

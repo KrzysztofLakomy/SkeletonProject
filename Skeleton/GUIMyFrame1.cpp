@@ -62,11 +62,6 @@ void GUIMyFrame1::m_slider4OnScroll( wxScrollEvent& event )
 // TODO: Implement m_slider4OnScroll
 }
 
-void GUIMyFrame1::m_slider20OnScroll( wxScrollEvent& event )
-{
-// TODO: Implement m_slider20OnScroll
-}
-
 
 void GUIMyFrame1::draw(wxClientDC& dcClient) 
 {
@@ -101,8 +96,8 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 		if (a.name() == "left forearm") {
 
 			//translacja zgiecie lewej reki w lokciu
-			Matrix trans_left_forearm = translate(40.05 * cos((-1.0 * (m_slider7->GetValue() - 50.0) * 1.8) * 3.1415 / 180.0) - (40.05 * cos((-1.0 * m_slider20->GetValue() * 0.9 - (m_slider7->GetValue() - 50.0) * 1.8) * 3.1415 / 180.0)),
-				(40.05*sin((1.0*(m_slider7->GetValue() - 50.0) * 1.8) * 3.1415 / 180.0) + (40.05 * sin((-1.0 * m_slider20->GetValue() * 0.9 - (m_slider7->GetValue() - 50.0) * 1.8) * 3.1415 / 180.0))), 0);
+			Matrix trans_left_forearm = translate(40.05 * cos((-1.0 * (m_slider7->GetValue() - 50.0) * 1.8) * 3.1415 / 180.0) - (40.05 * cos((-1.0 * m_slider4->GetValue() * 0.9 - (m_slider7->GetValue() - 50.0) * 1.8) * 3.1415 / 180.0)),
+				(40.05*sin((1.0*(m_slider7->GetValue() - 50.0) * 1.8) * 3.1415 / 180.0) + (40.05 * sin((-1.0 * m_slider4->GetValue() * 0.9 - (m_slider7->GetValue() - 50.0) * 1.8) * 3.1415 / 180.0))), 0);
 
 			beg = mat_vec_multiply(trans_left_forearm, beg);
 
