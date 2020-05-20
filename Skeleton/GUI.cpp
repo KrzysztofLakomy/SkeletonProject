@@ -44,31 +44,31 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_staticText10->Wrap( -1 );
 	bSizer3->Add( m_staticText10, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider8 = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_slider8 = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer3->Add( m_slider8, 0, wxALL, 5 );
 
-	m_staticText11 = new wxStaticText( this, wxID_ANY, wxT("aa"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText11 = new wxStaticText( this, wxID_ANY, wxT("Left Arm Front"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
 	bSizer3->Add( m_staticText11, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider15 = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_slider15 = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer3->Add( m_slider15, 0, wxALL, 5 );
 
-	m_staticText19 = new wxStaticText( this, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText19 = new wxStaticText( this, wxID_ANY, wxT("Left Tibia"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText19->Wrap( -1 );
 	bSizer3->Add( m_staticText19, 0, wxALIGN_CENTER|wxALL, 5 );
 
 	m_slider16 = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer3->Add( m_slider16, 0, wxALL, 5 );
 
-	m_staticText20 = new wxStaticText( this, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText20 = new wxStaticText( this, wxID_ANY, wxT("Left Thigh Side"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText20->Wrap( -1 );
 	bSizer3->Add( m_staticText20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider17 = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_slider17 = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer3->Add( m_slider17, 0, wxALL, 5 );
 
-	m_staticText21 = new wxStaticText( this, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText21 = new wxStaticText( this, wxID_ANY, wxT("Left Thigh Front"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText21->Wrap( -1 );
 	bSizer3->Add( m_staticText21, 0, wxALIGN_CENTER|wxALL, 5 );
 
@@ -85,7 +85,7 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 
-	m_slider5 = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_slider5 = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer7->Add( m_slider5, 0, wxALL, 5 );
 
 	m_staticText12 = new wxStaticText( this, wxID_ANY, wxT("Right Forearm"), wxDefaultPosition, wxDefaultSize, 0 );
@@ -95,35 +95,35 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_slider9 = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer7->Add( m_slider9, 0, wxALL, 5 );
 
-	m_staticText13 = new wxStaticText( this, wxID_ANY, wxT("Right Arm"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText13 = new wxStaticText( this, wxID_ANY, wxT("Right Arm Side"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText13->Wrap( -1 );
 	bSizer7->Add( m_staticText13, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider10 = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_slider10 = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer7->Add( m_slider10, 0, wxALL, 5 );
 
-	m_staticText14 = new wxStaticText( this, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText14 = new wxStaticText( this, wxID_ANY, wxT("Right Arm Front"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText14->Wrap( -1 );
 	bSizer7->Add( m_staticText14, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider11 = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_slider11 = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer7->Add( m_slider11, 0, wxALL, 5 );
 
-	m_staticText15 = new wxStaticText( this, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText15 = new wxStaticText( this, wxID_ANY, wxT("Right Tibia"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText15->Wrap( -1 );
 	bSizer7->Add( m_staticText15, 0, wxALIGN_CENTER|wxALL, 5 );
 
 	m_slider12 = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer7->Add( m_slider12, 0, wxALL, 5 );
 
-	m_staticText16 = new wxStaticText( this, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText16 = new wxStaticText( this, wxID_ANY, wxT("Right Thigh Side"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText16->Wrap( -1 );
 	bSizer7->Add( m_staticText16, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider13 = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	m_slider13 = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
 	bSizer7->Add( m_slider13, 0, wxALL, 5 );
 
-	m_staticText17 = new wxStaticText( this, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText17 = new wxStaticText( this, wxID_ANY, wxT("Right Thigh Front"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText17->Wrap( -1 );
 	bSizer7->Add( m_staticText17, 0, wxALIGN_CENTER|wxALL, 5 );
 

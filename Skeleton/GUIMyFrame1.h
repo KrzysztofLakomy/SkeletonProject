@@ -39,6 +39,9 @@ class GUIMyFrame1 : public MyFrame1
 		bool is_panel_clicked = false;
 
 
+
+
+
 };
 
 #endif // __GUIMyFrame1__

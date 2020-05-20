@@ -78,38 +78,101 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 	
 	Matrix trans = translate(w / 2.0, h / 2.0, 0);
 
-	///translacja do ruszania ramieniem dla punktu w lokciu
-	Matrix trans_left_arm_side = translate(50.0 - (50.0 * cos((-1.0 * (m_slider7->GetValue() - 50.0) * 1.8) * 3.1415 / 180.0)), 
-									  50.0 * sin((-1.0 * (m_slider7->GetValue() - 50.0) * 1.8) * 3.1415 / 180.0), 0);
-
-	//translacja do ruszania ramieniem dla punktu w koncowce przedramienia
-	Matrix trans_left_arm_forearm_side = translate(90.0 - (90.0 * cos((-1.0 * (m_slider7->GetValue() - 50.0) * 1.8) * 3.1415 / 180.0)),
-											  90.0 * sin((-1.0 * (m_slider7->GetValue() - 50.0) * 1.8) * 3.1415 / 180.0), 0);
-	
+	//do obracania szkieletem
 	Matrix rot_y = rotate_y(alpha);
 	Matrix rot_x = rotate_x(beta);
 	Matrix rot = mat_mat_multiply(rot_x, rot_y);
-	//
+	
 	for (auto& a : _bones) {
 		Vec beg = a.begin();
 		Vec en = a.end();
 		if (a.name() == "left forearm") {
 
-			//translacja zgiecie lewej reki w lokciu
-			Matrix trans_left_forearm = translate(40.05 * cos((-1.0 * (m_slider7->GetValue() - 50.0) * 1.8) * 3.1415 / 180.0) - (40.05 * cos((-1.0 * m_slider4->GetValue() * 0.9 - (m_slider7->GetValue() - 50.0) * 1.8) * 3.1415 / 180.0)),
-				(40.05*sin((1.0*(m_slider7->GetValue() - 50.0) * 1.8) * 3.1415 / 180.0) + (40.05 * sin((-1.0 * m_slider4->GetValue() * 0.9 - (m_slider7->GetValue() - 50.0) * 1.8) * 3.1415 / 180.0))), 0);
+			//ruch lewa reka w ³okciu
+			beg = mat_vec_multiply(translate(60, 100, 0), beg);
+			beg = mat_vec_multiply(rotate_z(m_slider4->GetValue() * 0.9),beg);
+			beg = mat_vec_multiply(translate(-60, -100, 0), beg);
 
-			beg = mat_vec_multiply(trans_left_forearm, beg);
-
-			beg = mat_vec_multiply(trans_left_arm_forearm_side, beg);
-			en = mat_vec_multiply(trans_left_arm_side, en);
 			
+			//do lewej reki ca³ej w bok
+			beg = mat_vec_multiply(translate(10, 100, 0), beg);
+			beg = mat_vec_multiply(rotate_z((m_slider7->GetValue() - 50.0) * 1.8), beg);
+			beg = mat_vec_multiply(translate(-10, -100, 0), beg);
+
+			en = mat_vec_multiply(translate(10, 100, 0), en);
+			en = mat_vec_multiply(rotate_z((m_slider7->GetValue() - 50.0) * 1.8), en);
+			en = mat_vec_multiply(translate(-10, -100, 0), en);
+
+
+			//do lewej rek calej do przodu
+			beg = mat_vec_multiply(translate(10, 100, 0), beg);
+			beg = mat_vec_multiply(rotate_y((m_slider8->GetValue() * 0.9)), beg);
+			beg = mat_vec_multiply(translate(-10, -100, 0), beg);
+
+			en = mat_vec_multiply(translate(10, 100, 0), en);
+			en = mat_vec_multiply(rotate_y((m_slider8->GetValue() * 0.9)), en);
+			en = mat_vec_multiply(translate(-10, -100, 0), en);
 		}
 
 		if (a.name() == "left arm") {
-			beg = mat_vec_multiply(trans_left_arm_side, beg);
-			
+
+			//do lewej reki w bok
+			beg = mat_vec_multiply(translate(10, 100, 0), beg);
+			beg = mat_vec_multiply(rotate_z((m_slider7->GetValue() - 50.0) * 1.8), beg);
+			beg = mat_vec_multiply(translate(-10, -100, 0), beg);
+
+
+			//do lewej reki do przodu
+			beg = mat_vec_multiply(translate(10, 100, 0), beg);
+			beg = mat_vec_multiply(rotate_y(m_slider8->GetValue() * 0.9), beg);
+			beg = mat_vec_multiply(translate(-10, -100, 0), beg);
 		}
+
+		if (a.name() == "right forearm") {
+
+			//ruch prawa reka w ³okciu
+			en = mat_vec_multiply(translate(-60, 100, 0), en);
+			en = mat_vec_multiply(rotate_z(-m_slider5->GetValue() * 0.9), en);
+			en = mat_vec_multiply(translate(60, -100, 0), en);
+
+
+			//do prawej reki ca³ej w bok
+			beg = mat_vec_multiply(translate(-10, 100, 0), beg);
+			beg = mat_vec_multiply(rotate_z((m_slider9->GetValue() - 50.0) * 1.8), beg);
+			beg = mat_vec_multiply(translate(10, -100, 0), beg);
+
+			en = mat_vec_multiply(translate(-10, 100, 0), en);
+			en = mat_vec_multiply(rotate_z((m_slider9->GetValue() - 50.0) * 1.8), en);
+			en = mat_vec_multiply(translate(10, -100, 0), en);
+
+
+			//do prawej rek calej do przodu
+			beg = mat_vec_multiply(translate(-10, 100, 0), beg);
+			beg = mat_vec_multiply(rotate_y((m_slider10->GetValue() * 0.9)), beg);
+			beg = mat_vec_multiply(translate(10, -100, 0), beg);
+
+			en = mat_vec_multiply(translate(-10, 100, 0), en);
+			en = mat_vec_multiply(rotate_y((m_slider10->GetValue() * 0.9)), en);
+			en = mat_vec_multiply(translate(10, -100, 0), en);
+
+		}
+
+		if (a.name() == "right arm") {
+
+			//do prawej reki w bok
+			en = mat_vec_multiply(translate(-10, 100, 0), en);
+			en = mat_vec_multiply(rotate_z((m_slider9->GetValue() - 50.0) * 1.8), en);
+			en = mat_vec_multiply(translate(10, -100, 0), en);
+
+
+
+			//do prawej reki do przodu
+			en = mat_vec_multiply(translate(-10, 100, 0), en);
+			en = mat_vec_multiply(rotate_y(m_slider10->GetValue() * 0.9), en);
+			en = mat_vec_multiply(translate(10, -100, 0), en);
+		}
+
+
 
 		beg = mat_vec_multiply(rot, beg);
 		en = mat_vec_multiply(rot, en);
