@@ -89,7 +89,7 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 	Matrix rot_y = rotate_y(alpha);
 	Matrix rot_x = rotate_x(beta);
 	Matrix rot = mat_mat_multiply(rot_x, rot_y);
-
+	//
 	for (auto& a : _bones) {
 		Vec beg = a.begin();
 		Vec en = a.end();
