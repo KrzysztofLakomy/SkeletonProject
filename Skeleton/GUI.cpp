@@ -30,54 +30,61 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	wxBoxSizer* bSizer3;
 	bSizer3 = new wxBoxSizer( wxVERTICAL );
 
-	m_slider4 = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
-	bSizer3->Add( m_slider4, 0, wxALL, 5 );
+	m_left_forearm_slider = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer3->Add( m_left_forearm_slider, 0, wxALL, 5 );
 
 	m_staticText9 = new wxStaticText( this, wxID_ANY, wxT("Left Forearm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText9->Wrap( -1 );
 	bSizer3->Add( m_staticText9, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider7 = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
-	bSizer3->Add( m_slider7, 0, wxALL, 5 );
+	m_left_arm_side_slider = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer3->Add( m_left_arm_side_slider, 0, wxALL, 5 );
 
 	m_staticText10 = new wxStaticText( this, wxID_ANY, wxT("Left Arm Side"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText10->Wrap( -1 );
 	bSizer3->Add( m_staticText10, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider8 = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
-	bSizer3->Add( m_slider8, 0, wxALL, 5 );
+	m_left_arm_front_slider = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer3->Add( m_left_arm_front_slider, 0, wxALL, 5 );
 
 	m_staticText11 = new wxStaticText( this, wxID_ANY, wxT("Left Arm Front"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText11->Wrap( -1 );
 	bSizer3->Add( m_staticText11, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider15 = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
-	bSizer3->Add( m_slider15, 0, wxALL, 5 );
+	m_left_tibia_slider = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer3->Add( m_left_tibia_slider, 0, wxALL, 5 );
 
 	m_staticText19 = new wxStaticText( this, wxID_ANY, wxT("Left Tibia"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText19->Wrap( -1 );
 	bSizer3->Add( m_staticText19, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider16 = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
-	bSizer3->Add( m_slider16, 0, wxALL, 5 );
+	m_left_thigh_side_slider = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer3->Add( m_left_thigh_side_slider, 0, wxALL, 5 );
 
 	m_staticText20 = new wxStaticText( this, wxID_ANY, wxT("Left Thigh Side"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText20->Wrap( -1 );
 	bSizer3->Add( m_staticText20, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider17 = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
-	bSizer3->Add( m_slider17, 0, wxALL, 5 );
+	m_left_thigh_front_slider = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer3->Add( m_left_thigh_front_slider, 0, wxALL, 5 );
 
 	m_staticText21 = new wxStaticText( this, wxID_ANY, wxT("Left Thigh Front"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText21->Wrap( -1 );
 	bSizer3->Add( m_staticText21, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider18 = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
-	bSizer3->Add( m_slider18, 0, wxALL, 5 );
+	m_middle_back_front_slider = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer3->Add( m_middle_back_front_slider, 0, wxALL, 5 );
 
-	m_staticText22 = new wxStaticText( this, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText22 = new wxStaticText( this, wxID_ANY, wxT("Middle Back front"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText22->Wrap( -1 );
 	bSizer3->Add( m_staticText22, 0, wxALIGN_CENTER|wxALL, 5 );
+
+	m_lower_back_front_slider = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer3->Add( m_lower_back_front_slider, 0, wxALL, 5 );
+
+	m_staticText161 = new wxStaticText( this, wxID_ANY, wxT("Lower Back Front"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText161->Wrap( -1 );
+	bSizer3->Add( m_staticText161, 0, wxALIGN_CENTER, 5 );
 
 
 	bSizer1->Add( bSizer3, 0, wxEXPAND, 5 );
@@ -85,54 +92,61 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	wxBoxSizer* bSizer7;
 	bSizer7 = new wxBoxSizer( wxVERTICAL );
 
-	m_slider5 = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
-	bSizer7->Add( m_slider5, 0, wxALL, 5 );
+	m_right_forearm_slider = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer7->Add( m_right_forearm_slider, 0, wxALL, 5 );
 
 	m_staticText12 = new wxStaticText( this, wxID_ANY, wxT("Right Forearm"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText12->Wrap( -1 );
 	bSizer7->Add( m_staticText12, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider9 = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
-	bSizer7->Add( m_slider9, 0, wxALL, 5 );
+	m_right_arm_side_slider = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer7->Add( m_right_arm_side_slider, 0, wxALL, 5 );
 
 	m_staticText13 = new wxStaticText( this, wxID_ANY, wxT("Right Arm Side"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText13->Wrap( -1 );
 	bSizer7->Add( m_staticText13, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider10 = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
-	bSizer7->Add( m_slider10, 0, wxALL, 5 );
+	m_right_arm_front_slider = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer7->Add( m_right_arm_front_slider, 0, wxALL, 5 );
 
 	m_staticText14 = new wxStaticText( this, wxID_ANY, wxT("Right Arm Front"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText14->Wrap( -1 );
 	bSizer7->Add( m_staticText14, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider11 = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
-	bSizer7->Add( m_slider11, 0, wxALL, 5 );
+	m_right_tibia_slider = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer7->Add( m_right_tibia_slider, 0, wxALL, 5 );
 
 	m_staticText15 = new wxStaticText( this, wxID_ANY, wxT("Right Tibia"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText15->Wrap( -1 );
 	bSizer7->Add( m_staticText15, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider12 = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
-	bSizer7->Add( m_slider12, 0, wxALL, 5 );
+	m_right_thigh_side_slider = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer7->Add( m_right_thigh_side_slider, 0, wxALL, 5 );
 
 	m_staticText16 = new wxStaticText( this, wxID_ANY, wxT("Right Thigh Side"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText16->Wrap( -1 );
 	bSizer7->Add( m_staticText16, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider13 = new wxSlider( this, wxID_ANY, 0, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
-	bSizer7->Add( m_slider13, 0, wxALL, 5 );
+	m_right_thigh_front_slider = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer7->Add( m_right_thigh_front_slider, 0, wxALL, 5 );
 
 	m_staticText17 = new wxStaticText( this, wxID_ANY, wxT("Right Thigh Front"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText17->Wrap( -1 );
 	bSizer7->Add( m_staticText17, 0, wxALIGN_CENTER|wxALL, 5 );
 
-	m_slider14 = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
-	bSizer7->Add( m_slider14, 0, wxALL, 5 );
+	m_middle_back_side_slider = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer7->Add( m_middle_back_side_slider, 0, wxALL, 5 );
 
-	m_staticText18 = new wxStaticText( this, wxID_ANY, wxT("MyLabel"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText18 = new wxStaticText( this, wxID_ANY, wxT("MIddle Back Side"), wxDefaultPosition, wxDefaultSize, 0 );
 	m_staticText18->Wrap( -1 );
 	bSizer7->Add( m_staticText18, 0, wxALIGN_CENTER|wxALL, 5 );
+
+	m_lower_back_side_slider = new wxSlider( this, wxID_ANY, 50, 0, 100, wxDefaultPosition, wxDefaultSize, wxSL_HORIZONTAL );
+	bSizer7->Add( m_lower_back_side_slider, 0, wxALL, 5 );
+
+	m_staticText151 = new wxStaticText( this, wxID_ANY, wxT("Lower Back Side"), wxDefaultPosition, wxDefaultSize, 0 );
+	m_staticText151->Wrap( -1 );
+	bSizer7->Add( m_staticText151, 0, wxALIGN_CENTER, 5 );
 
 
 	bSizer1->Add( bSizer7, 0, wxEXPAND, 5 );
@@ -149,15 +163,15 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_panel2->Connect( wxEVT_MOTION, wxMouseEventHandler( MyFrame1::m_panel2OnMotion ), NULL, this );
 	m_panel2->Connect( wxEVT_PAINT, wxPaintEventHandler( MyFrame1::m_panel2OnPaint ), NULL, this );
 	m_panel2->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( MyFrame1::m_panel2OnUpdateUI ), NULL, this );
-	m_slider4->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_slider4->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_slider4->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_slider4->Connect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_slider4->Connect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_slider4->Connect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_slider4->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_slider4->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_slider4->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_left_forearm_slider->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_left_forearm_slider->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_left_forearm_slider->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_left_forearm_slider->Connect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_left_forearm_slider->Connect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_left_forearm_slider->Connect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_left_forearm_slider->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_left_forearm_slider->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_left_forearm_slider->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
 }
 
 MyFrame1::~MyFrame1()
@@ -168,14 +182,14 @@ MyFrame1::~MyFrame1()
 	m_panel2->Disconnect( wxEVT_MOTION, wxMouseEventHandler( MyFrame1::m_panel2OnMotion ), NULL, this );
 	m_panel2->Disconnect( wxEVT_PAINT, wxPaintEventHandler( MyFrame1::m_panel2OnPaint ), NULL, this );
 	m_panel2->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( MyFrame1::m_panel2OnUpdateUI ), NULL, this );
-	m_slider4->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_slider4->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_slider4->Disconnect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_slider4->Disconnect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_slider4->Disconnect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_slider4->Disconnect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_slider4->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_slider4->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_slider4->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_left_forearm_slider->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_left_forearm_slider->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_left_forearm_slider->Disconnect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_left_forearm_slider->Disconnect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_left_forearm_slider->Disconnect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_left_forearm_slider->Disconnect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_left_forearm_slider->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_left_forearm_slider->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_left_forearm_slider->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
 
 }

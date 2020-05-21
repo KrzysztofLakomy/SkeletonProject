@@ -15,10 +15,10 @@ MyFrame1( parent )
 	_bones.push_back(Line(Vec(0, -50, 0), Vec(0, 0, 0), "lower backbone"));
 	_bones.push_back(Line(Vec(0, 0, 0), Vec(-10, 5, 0), "left hip"));
 	_bones.push_back(Line(Vec(0, 0, 0), Vec(10, 5, 0), "right hip"));
-	_bones.push_back(Line(Vec(-10, 5, 0), Vec(-40, 65, 0), "left thigh"));
-	_bones.push_back(Line(Vec(10, 5, 0), Vec(40, 65, 0), "right thigh"));
-	_bones.push_back(Line(Vec(-40, 65, 0), Vec(-80, 125, 0), "left tibia"));
-	_bones.push_back(Line(Vec(40, 65, 0), Vec(80, 125, 0), "right tibia"));
+	_bones.push_back(Line(Vec(-10, 5, 0), Vec(-30, 65, 0), "left thigh"));
+	_bones.push_back(Line(Vec(10, 5, 0), Vec(30, 65, 0), "right thigh"));
+	_bones.push_back(Line(Vec(-30, 65, 0), Vec(-40, 125, 0), "left tibia"));
+	_bones.push_back(Line(Vec(30, 65, 0), Vec(40, 125, 0), "right tibia"));
 }
 
 void GUIMyFrame1::m_panel2OnLeftDown( wxMouseEvent& event )
@@ -90,27 +90,27 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 
 			//ruch lewa reka w ³okciu
 			beg = mat_vec_multiply(translate(60, 100, 0), beg);
-			beg = mat_vec_multiply(rotate_z(m_slider4->GetValue() * 0.9),beg);
+			beg = mat_vec_multiply(rotate_z(m_left_forearm_slider->GetValue() * 0.9),beg);
 			beg = mat_vec_multiply(translate(-60, -100, 0), beg);
 
 			
 			//do lewej reki ca³ej w bok
 			beg = mat_vec_multiply(translate(10, 100, 0), beg);
-			beg = mat_vec_multiply(rotate_z((m_slider7->GetValue() - 50.0) * 1.8), beg);
+			beg = mat_vec_multiply(rotate_z((m_left_arm_side_slider->GetValue() - 50.0) * 1.8), beg);
 			beg = mat_vec_multiply(translate(-10, -100, 0), beg);
 
 			en = mat_vec_multiply(translate(10, 100, 0), en);
-			en = mat_vec_multiply(rotate_z((m_slider7->GetValue() - 50.0) * 1.8), en);
+			en = mat_vec_multiply(rotate_z((m_left_arm_side_slider->GetValue() - 50.0) * 1.8), en);
 			en = mat_vec_multiply(translate(-10, -100, 0), en);
 
 
 			//do lewej rek calej do przodu
 			beg = mat_vec_multiply(translate(10, 100, 0), beg);
-			beg = mat_vec_multiply(rotate_y((m_slider8->GetValue() * 0.9)), beg);
+			beg = mat_vec_multiply(rotate_y((m_left_arm_front_slider->GetValue() * 0.9)), beg);
 			beg = mat_vec_multiply(translate(-10, -100, 0), beg);
 
 			en = mat_vec_multiply(translate(10, 100, 0), en);
-			en = mat_vec_multiply(rotate_y((m_slider8->GetValue() * 0.9)), en);
+			en = mat_vec_multiply(rotate_y((m_left_arm_front_slider->GetValue() * 0.9)), en);
 			en = mat_vec_multiply(translate(-10, -100, 0), en);
 		}
 
@@ -118,13 +118,13 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 
 			//do lewej reki w bok
 			beg = mat_vec_multiply(translate(10, 100, 0), beg);
-			beg = mat_vec_multiply(rotate_z((m_slider7->GetValue() - 50.0) * 1.8), beg);
+			beg = mat_vec_multiply(rotate_z((m_left_arm_side_slider->GetValue() - 50.0) * 1.8), beg);
 			beg = mat_vec_multiply(translate(-10, -100, 0), beg);
 
 
 			//do lewej reki do przodu
 			beg = mat_vec_multiply(translate(10, 100, 0), beg);
-			beg = mat_vec_multiply(rotate_y(m_slider8->GetValue() * 0.9), beg);
+			beg = mat_vec_multiply(rotate_y(m_left_arm_front_slider->GetValue() * 0.9), beg);
 			beg = mat_vec_multiply(translate(-10, -100, 0), beg);
 		}
 
@@ -132,27 +132,27 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 
 			//ruch prawa reka w ³okciu
 			en = mat_vec_multiply(translate(-60, 100, 0), en);
-			en = mat_vec_multiply(rotate_z(-m_slider5->GetValue() * 0.9), en);
+			en = mat_vec_multiply(rotate_z(-m_right_forearm_slider->GetValue() * 0.9), en);
 			en = mat_vec_multiply(translate(60, -100, 0), en);
 
 
 			//do prawej reki ca³ej w bok
 			beg = mat_vec_multiply(translate(-10, 100, 0), beg);
-			beg = mat_vec_multiply(rotate_z((m_slider9->GetValue() - 50.0) * 1.8), beg);
+			beg = mat_vec_multiply(rotate_z((m_right_arm_side_slider->GetValue() - 50.0) * 1.8), beg);
 			beg = mat_vec_multiply(translate(10, -100, 0), beg);
 
 			en = mat_vec_multiply(translate(-10, 100, 0), en);
-			en = mat_vec_multiply(rotate_z((m_slider9->GetValue() - 50.0) * 1.8), en);
+			en = mat_vec_multiply(rotate_z((m_right_arm_side_slider->GetValue() - 50.0) * 1.8), en);
 			en = mat_vec_multiply(translate(10, -100, 0), en);
 
 
 			//do prawej rek calej do przodu
 			beg = mat_vec_multiply(translate(-10, 100, 0), beg);
-			beg = mat_vec_multiply(rotate_y((m_slider10->GetValue() * 0.9)), beg);
+			beg = mat_vec_multiply(rotate_y((m_right_arm_front_slider->GetValue() * 0.9)), beg);
 			beg = mat_vec_multiply(translate(10, -100, 0), beg);
 
 			en = mat_vec_multiply(translate(-10, 100, 0), en);
-			en = mat_vec_multiply(rotate_y((m_slider10->GetValue() * 0.9)), en);
+			en = mat_vec_multiply(rotate_y((m_right_arm_front_slider->GetValue() * 0.9)), en);
 			en = mat_vec_multiply(translate(10, -100, 0), en);
 
 		}
@@ -161,15 +161,27 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 
 			//do prawej reki w bok
 			en = mat_vec_multiply(translate(-10, 100, 0), en);
-			en = mat_vec_multiply(rotate_z((m_slider9->GetValue() - 50.0) * 1.8), en);
+			en = mat_vec_multiply(rotate_z((m_right_arm_side_slider->GetValue() - 50.0) * 1.8), en);
 			en = mat_vec_multiply(translate(10, -100, 0), en);
 
 
 
 			//do prawej reki do przodu
 			en = mat_vec_multiply(translate(-10, 100, 0), en);
-			en = mat_vec_multiply(rotate_y(m_slider10->GetValue() * 0.9), en);
+			en = mat_vec_multiply(rotate_y(m_right_arm_front_slider->GetValue() * 0.9), en);
 			en = mat_vec_multiply(translate(10, -100, 0), en);
+		}
+
+		if (a.name() == "left tibia") {
+
+			//ruch lewy piszczel
+			en = mat_vec_multiply(translate(30, -65, 0), en);
+			en = mat_vec_multiply(rotate_x(m_left_tibia_slider->GetValue() * 0.9), en);
+			en = mat_vec_multiply(translate(-30, 65, 0), en);
+		}
+
+		if (a.name() == "left thigh") {
+
 		}
 
 
