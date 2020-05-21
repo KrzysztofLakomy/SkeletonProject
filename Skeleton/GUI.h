@@ -32,34 +32,38 @@ class MyFrame1 : public wxFrame
 
 	protected:
 		wxPanel* m_panel2;
-		wxSlider* m_slider4;
+		wxSlider* m_left_forearm_slider;
 		wxStaticText* m_staticText9;
-		wxSlider* m_slider7;
+		wxSlider* m_left_arm_side_slider;
 		wxStaticText* m_staticText10;
-		wxSlider* m_slider8;
+		wxSlider* m_left_arm_front_slider;
 		wxStaticText* m_staticText11;
-		wxSlider* m_slider15;
+		wxSlider* m_left_tibia_slider;
 		wxStaticText* m_staticText19;
-		wxSlider* m_slider16;
+		wxSlider* m_left_thigh_side_slider;
 		wxStaticText* m_staticText20;
-		wxSlider* m_slider17;
+		wxSlider* m_left_thigh_front_slider;
 		wxStaticText* m_staticText21;
-		wxSlider* m_slider18;
+		wxSlider* m_middle_back_front_slider;
 		wxStaticText* m_staticText22;
-		wxSlider* m_slider5;
+		wxSlider* m_lower_back_front_slider;
+		wxStaticText* m_staticText161;
+		wxSlider* m_right_forearm_slider;
 		wxStaticText* m_staticText12;
-		wxSlider* m_slider9;
+		wxSlider* m_right_arm_side_slider;
 		wxStaticText* m_staticText13;
-		wxSlider* m_slider10;
+		wxSlider* m_right_arm_front_slider;
 		wxStaticText* m_staticText14;
-		wxSlider* m_slider11;
+		wxSlider* m_right_tibia_slider;
 		wxStaticText* m_staticText15;
-		wxSlider* m_slider12;
+		wxSlider* m_right_thigh_side_slider;
 		wxStaticText* m_staticText16;
-		wxSlider* m_slider13;
+		wxSlider* m_right_thigh_front_slider;
 		wxStaticText* m_staticText17;
-		wxSlider* m_slider14;
+		wxSlider* m_middle_back_side_slider;
 		wxStaticText* m_staticText18;
+		wxSlider* m_lower_back_side_slider;
+		wxStaticText* m_staticText151;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void m_panel2OnLeftDown( wxMouseEvent& event ) { event.Skip(); }
