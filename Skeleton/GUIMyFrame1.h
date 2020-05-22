@@ -33,6 +33,7 @@ class GUIMyFrame1 : public MyFrame1
 
 	private:
 		std::vector<Line> _bones;
+		std::vector<Circle> _joints;
 		wxPoint start_point;
 		double alpha = 0.0;
 		double beta = 0.0;
