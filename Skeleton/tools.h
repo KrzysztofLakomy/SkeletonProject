@@ -69,3 +69,28 @@ private:
 	Vec _end;
 	std::string _name;
 };
+
+
+class Circle {
+public:
+	Circle(Vec center, std::string name) : _center{ center }, _name{ name } {}
+	~Circle() = default;
+
+	Vec & center() {
+		return _center;
+	}
+
+	std::string name() {
+		return _name;
+	}
+
+	double radius() {
+		return _radius;
+	}
+
+private:
+	Vec _center;
+	std::string _name;
+	double _radius = 3.0;
+
+};

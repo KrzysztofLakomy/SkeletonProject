@@ -19,6 +19,19 @@ MyFrame1( parent )
 	_bones.push_back(Line(Vec(10, 5, 0), Vec(20, 65, 0), "right thigh"));
 	_bones.push_back(Line(Vec(-20, 65, 0), Vec(-25, 135, 0), "left tibia"));
 	_bones.push_back(Line(Vec(20, 65, 0), Vec(25, 135, 0), "right tibia"));
+
+	_joints.push_back(Circle(Vec(-60, -100, 0), "left elbow"));
+	_joints.push_back(Circle(Vec(-10, -100, 0), "left shoulder"));
+	_joints.push_back(Circle(Vec(0, -100, 0), "neck"));
+	_joints.push_back(Circle(Vec(10, -100, 0), "right shoulder"));
+	_joints.push_back(Circle(Vec(60, -100, 0), "right elbow"));
+	_joints.push_back(Circle(Vec(0, -50, 0), "upper back"));
+	_joints.push_back(Circle(Vec(0, 0, 0), "lower back"));
+	_joints.push_back(Circle(Vec(-10, 5, 0), "left hip"));
+	_joints.push_back(Circle(Vec(10, 5, 0), "right hip"));
+	_joints.push_back(Circle(Vec(-20, 65, 0), "left knee"));
+	_joints.push_back(Circle(Vec(20, 65, 0), "right knee"));
+
 }
 
 void GUIMyFrame1::m_panel2OnLeftDown( wxMouseEvent& event )
@@ -37,8 +50,8 @@ is_panel_clicked = false;
 void GUIMyFrame1::m_panel2OnMotion( wxMouseEvent& event )
 {
 if (event.LeftIsDown()&& is_panel_clicked) {
-alpha = event.GetPosition().x - start_point.x;
-beta = start_point.y - event.GetPosition().y;
+alpha = static_cast<double>(event.GetPosition().x) - static_cast<double>(start_point.x);
+beta = static_cast<double>(start_point.y) - static_cast<double>(event.GetPosition().y);
 }
 m_panel2->Refresh();
 }
@@ -73,7 +86,7 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 	int w, h;
 	m_panel2->GetSize(&w, &h);
 
-	dc.SetPen(wxPen(wxColor(0,0,0),3));
+	dc.SetPen(wxPen(wxColor(0,0,0),2));
 
 	
 	Matrix trans = translate(w / 2.0, h / 2.0, 0);
@@ -82,112 +95,157 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 	Matrix rot_y = rotate_y(alpha);
 	Matrix rot_x = rotate_x(beta);
 	Matrix rot = mat_mat_multiply(rot_x, rot_y);
+
+
+	Matrix trans_left_forearm = translate(60, 100, 0);
+	Matrix rot_left_forearm = rotate_z(m_left_forearm_slider->GetValue() * 0.9);
+	Matrix transback_left_forearm = translate(-60, -100, 0);
+
+	Matrix trans_right_forearm = translate(-60, 100, 0);
+	Matrix rot_right_forearm = rotate_z(-m_right_forearm_slider->GetValue() * 0.9);
+	Matrix transback_right_forearm = translate(60, -100, 0);
+
+	Matrix trans_left_arm = translate(10, 100, 0);
+	Matrix rot_left_arm_side = rotate_z((m_left_arm_side_slider->GetValue() - 50.0) * 1.8);
+	Matrix rot_left_arm_front = rotate_y(m_left_arm_front_slider->GetValue() * 0.9);
+	Matrix transback_left_arm = translate(-10, -100, 0);
+
+	Matrix trans_right_arm = translate(-10, 100, 0);
+	Matrix rot_right_arm_side = rotate_z((m_right_arm_side_slider->GetValue() - 50.0) * 1.8);
+	Matrix rot_right_arm_front = rotate_y(m_right_arm_front_slider->GetValue() * 0.9);
+	Matrix transback_right_arm = translate(10, -100, 0);
+
+	Matrix trans_left_tibia = translate(20, -65, 0);
+	Matrix rot_left_tibia = rotate_x(m_left_tibia_slider->GetValue() * 0.9);
+	Matrix transback_left_tibia = translate(-20, 65, 0);
+
+	Matrix trans_right_tibia = translate(-20, -65, 0);
+	Matrix rot_right_tibia = rotate_x(m_right_tibia_slider->GetValue() * 0.9);
+	Matrix transback_right_tibia = translate(20, 65, 0);
+
+	Matrix trans_left_thigh = translate(10, -5, 0);
+	Matrix rot_left_thigh_side = rotate_z(m_left_thigh_side_slider->GetValue() * 0.6);
+	Matrix rot_left_thigh_front = rotate_x((m_left_thigh_front_slider->GetValue() - 50.0) * 0.9);
+	Matrix transback_left_thigh = translate(-10, 5, 0);
+
+	Matrix trans_right_thigh = translate(-10, -5, 0);
+	Matrix rot_right_thigh_side = rotate_z(-m_right_thigh_side_slider->GetValue() * 0.6);
+	Matrix rot_right_thigh_front = rotate_x((m_right_thigh_front_slider->GetValue() - 50.0) * 0.9);
+	Matrix transback_right_thigh = translate(10, 5, 0);
+
+	Matrix trans_upper_back = translate(0, 50, 0);
+	Matrix rot_upper_back_front = rotate_x(m_middle_back_front_slider->GetValue() * 0.10);
+	Matrix rot_upper_back_side = rotate_z((m_middle_back_side_slider->GetValue() - 50.0) * 0.2);
+	Matrix transback_upper_back = translate(0, -50, 0);
 	
+	Matrix rot_lower_back_front = rotate_x(m_lower_back_front_slider->GetValue() * 0.35);
+	Matrix rot_lower_back_side = rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5);
+
 	for (auto& a : _bones) {
 		Vec beg = a.begin();
 		Vec en = a.end();
 		
 		if (a.name() == "neck") {
 			//ruch szyi przy pochyleniu do przodu middle back
-			beg = mat_vec_multiply(translate(0, 50, 0), beg);
-			beg = mat_vec_multiply(rotate_x(m_middle_back_front_slider->GetValue() * 0.10), beg);
-			beg = mat_vec_multiply(translate(0, -50, 0), beg);
+			beg = mat_vec_multiply(trans_upper_back, beg);
+			beg = mat_vec_multiply(rot_upper_back_front, beg);
+			beg = mat_vec_multiply(transback_upper_back, beg);
 
-			en = mat_vec_multiply(translate(0, 50, 0), en);
-			en = mat_vec_multiply(rotate_x(m_middle_back_front_slider->GetValue() * 0.10), en);
-			en = mat_vec_multiply(translate(0, -50, 0), en);
+			en = mat_vec_multiply(trans_upper_back, en);
+			en = mat_vec_multiply(rot_upper_back_front, en);
+			en = mat_vec_multiply(transback_upper_back, en);
 
 
 
 			//ruch szyi przy middle back do boku
-			beg = mat_vec_multiply(translate(0, 50, 0), beg);
-			beg = mat_vec_multiply(rotate_z((m_middle_back_side_slider->GetValue() - 50.0) * 0.2), beg);
-			beg = mat_vec_multiply(translate(0, -50, 0), beg);
+			beg = mat_vec_multiply(trans_upper_back, beg);
+			beg = mat_vec_multiply(rot_upper_back_side, beg);
+			beg = mat_vec_multiply(transback_upper_back, beg);
 
-			en = mat_vec_multiply(translate(0, 50, 0), en);
-			en = mat_vec_multiply(rotate_z((m_middle_back_side_slider->GetValue() - 50.0) * 0.2), en);
-			en = mat_vec_multiply(translate(0, -50, 0), en);
+			en = mat_vec_multiply(trans_upper_back, en);
+			en = mat_vec_multiply(rot_upper_back_side, en);
+			en = mat_vec_multiply(transback_upper_back, en);
 
 
 			//ruch szyja dolna czesc kregoslupa przod
-			beg = mat_vec_multiply(rotate_x(m_lower_back_front_slider->GetValue() * 0.35), beg);
+			beg = mat_vec_multiply(rot_lower_back_front, beg);
 
-			en = mat_vec_multiply(rotate_x(m_lower_back_front_slider->GetValue() * 0.35), en);
+			en = mat_vec_multiply(rot_lower_back_front, en);
 
 
 			//ruch szyja dolna czesc kregoslupa boki
-			beg = mat_vec_multiply(rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5), beg);
+			beg = mat_vec_multiply(rot_lower_back_side, beg);
 
-			en = mat_vec_multiply(rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5), en);
+			en = mat_vec_multiply(rot_lower_back_side, en);
 		}
 
 		if (a.name() == "left shoulder") {
 			//ruch lewego barku przy pochyleniu do przodu middle back
-			beg = mat_vec_multiply(translate(0, 50, 0), beg);
-			beg = mat_vec_multiply(rotate_x(m_middle_back_front_slider->GetValue() * 0.10), beg);
-			beg = mat_vec_multiply(translate(0, -50, 0), beg);
+			beg = mat_vec_multiply(trans_upper_back, beg);
+			beg = mat_vec_multiply(rot_upper_back_front, beg);
+			beg = mat_vec_multiply(transback_upper_back, beg);
 
-			en = mat_vec_multiply(translate(0, 50, 0), en);
-			en = mat_vec_multiply(rotate_x(m_middle_back_front_slider->GetValue() * 0.10), en);
-			en = mat_vec_multiply(translate(0, -50, 0), en);
+			en = mat_vec_multiply(trans_upper_back, en);
+			en = mat_vec_multiply(rot_upper_back_front, en);
+			en = mat_vec_multiply(transback_upper_back, en);
 
 
 
 			//ruch lwey bark przy middle back do boku
-			beg = mat_vec_multiply(translate(0, 50, 0), beg);
-			beg = mat_vec_multiply(rotate_z((m_middle_back_side_slider->GetValue() - 50.0) * 0.2), beg);
-			beg = mat_vec_multiply(translate(0, -50, 0), beg);
+			beg = mat_vec_multiply(trans_upper_back, beg);
+			beg = mat_vec_multiply(rot_upper_back_side, beg);
+			beg = mat_vec_multiply(transback_upper_back, beg);
 
-			en = mat_vec_multiply(translate(0, 50, 0), en);
-			en = mat_vec_multiply(rotate_z((m_middle_back_side_slider->GetValue() - 50.0) * 0.2), en);
-			en = mat_vec_multiply(translate(0, -50, 0), en);
+			en = mat_vec_multiply(trans_upper_back, en);
+			en = mat_vec_multiply(rot_upper_back_side, en);
+			en = mat_vec_multiply(transback_upper_back, en);
 
 
 			//ruch lewy bark dolna czesc kregoslupa przod
-			beg = mat_vec_multiply(rotate_x(m_lower_back_front_slider->GetValue() * 0.35), beg);
+			beg = mat_vec_multiply(rot_lower_back_front, beg);
 
-			en = mat_vec_multiply(rotate_x(m_lower_back_front_slider->GetValue() * 0.35), en);
+			en = mat_vec_multiply(rot_lower_back_front, en);
 
 
 			//ruch lewy bark dolna czesc kregoslupa boki
-			beg = mat_vec_multiply(rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5), beg);
+			beg = mat_vec_multiply(rot_lower_back_side, beg);
 
-			en = mat_vec_multiply(rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5), en);
+			en = mat_vec_multiply(rot_lower_back_side, en);
 			
 		}
 
 		if (a.name() == "right shoulder") {
 			//ruch lewego barku przy pochyleniu do przodu middle back
-			beg = mat_vec_multiply(translate(0, 50, 0), beg);
-			beg = mat_vec_multiply(rotate_x(m_middle_back_front_slider->GetValue() * 0.10), beg);
-			beg = mat_vec_multiply(translate(0, -50, 0), beg);
+			beg = mat_vec_multiply(trans_upper_back, beg);
+			beg = mat_vec_multiply(rot_upper_back_front, beg);
+			beg = mat_vec_multiply(transback_upper_back, beg);
 
-			en = mat_vec_multiply(translate(0, 50, 0), en);
-			en = mat_vec_multiply(rotate_x(m_middle_back_front_slider->GetValue() * 0.10), en);
-			en = mat_vec_multiply(translate(0, -50, 0), en);
+			en = mat_vec_multiply(trans_upper_back, en);
+			en = mat_vec_multiply(rot_upper_back_front, en);
+			en = mat_vec_multiply(transback_upper_back, en);
 
 
 
 			//ruch prawy bark przy middle back do boku
-			beg = mat_vec_multiply(translate(0, 50, 0), beg);
-			beg = mat_vec_multiply(rotate_z((m_middle_back_side_slider->GetValue() - 50.0) * 0.2), beg);
-			beg = mat_vec_multiply(translate(0, -50, 0), beg);
+			beg = mat_vec_multiply(trans_upper_back, beg);
+			beg = mat_vec_multiply(rot_upper_back_side, beg);
+			beg = mat_vec_multiply(transback_upper_back, beg);
 
-			en = mat_vec_multiply(translate(0, 50, 0), en);
-			en = mat_vec_multiply(rotate_z((m_middle_back_side_slider->GetValue() - 50.0) * 0.2), en);
-			en = mat_vec_multiply(translate(0, -50, 0), en);
+			en = mat_vec_multiply(trans_upper_back, en);
+			en = mat_vec_multiply(rot_upper_back_side, en);
+			en = mat_vec_multiply(transback_upper_back, en);
 
 
 			//ruch prawy bark dolna czesc kregoslupa przod
-			beg = mat_vec_multiply(rotate_x(m_lower_back_front_slider->GetValue() * 0.35), beg);
+			beg = mat_vec_multiply(rot_lower_back_front, beg);
 
-			en = mat_vec_multiply(rotate_x(m_lower_back_front_slider->GetValue() * 0.35), en);
+			en = mat_vec_multiply(rot_lower_back_front, en);
 
 
 			//ruch prawy bark dolna czesc kregoslupa boki
-			beg = mat_vec_multiply(rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5), beg);
+			beg = mat_vec_multiply(rot_lower_back_side, beg);
 
-			en = mat_vec_multiply(rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5), en);
+			en = mat_vec_multiply(rot_lower_back_side, en);
 		}
 
 
@@ -195,344 +253,344 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 
 		if (a.name() == "left forearm") {
 			//ruch lewa reka w ³okciu
-			beg = mat_vec_multiply(translate(60, 100, 0), beg);
-			beg = mat_vec_multiply(rotate_z(m_left_forearm_slider->GetValue() * 0.9),beg);
-			beg = mat_vec_multiply(translate(-60, -100, 0), beg);
+			beg = mat_vec_multiply(trans_left_forearm, beg);
+			beg = mat_vec_multiply(rot_left_forearm,beg);
+			beg = mat_vec_multiply(transback_left_forearm, beg);
 
 			
 			//do lewej reki ca³ej w bok
-			beg = mat_vec_multiply(translate(10, 100, 0), beg);
-			beg = mat_vec_multiply(rotate_z((m_left_arm_side_slider->GetValue() - 50.0) * 1.8), beg);
-			beg = mat_vec_multiply(translate(-10, -100, 0), beg);
+			beg = mat_vec_multiply(trans_left_arm, beg);
+			beg = mat_vec_multiply(rot_left_arm_side, beg);
+			beg = mat_vec_multiply(transback_left_arm, beg);
 
-			en = mat_vec_multiply(translate(10, 100, 0), en);
-			en = mat_vec_multiply(rotate_z((m_left_arm_side_slider->GetValue() - 50.0) * 1.8), en);
-			en = mat_vec_multiply(translate(-10, -100, 0), en);
+			en = mat_vec_multiply(trans_left_arm, en);
+			en = mat_vec_multiply(rot_left_arm_side, en);
+			en = mat_vec_multiply(transback_left_arm, en);
 
 
 			//do lewej rek calej do przodu
-			beg = mat_vec_multiply(translate(10, 100, 0), beg);
-			beg = mat_vec_multiply(rotate_y((m_left_arm_front_slider->GetValue() * 0.9)), beg);
-			beg = mat_vec_multiply(translate(-10, -100, 0), beg);
+			beg = mat_vec_multiply(trans_left_arm, beg);
+			beg = mat_vec_multiply(rot_left_arm_front, beg);
+			beg = mat_vec_multiply(transback_left_arm, beg);
 
-			en = mat_vec_multiply(translate(10, 100, 0), en);
-			en = mat_vec_multiply(rotate_y((m_left_arm_front_slider->GetValue() * 0.9)), en);
-			en = mat_vec_multiply(translate(-10, -100, 0), en);
+			en = mat_vec_multiply(trans_left_arm, en);
+			en = mat_vec_multiply(rot_left_arm_front, en);
+			en = mat_vec_multiply(transback_left_arm, en);
 
 
 
 
 			//ruch lewego przedramienia przy middle back do przodu
-			beg = mat_vec_multiply(translate(0, 50, 0), beg);
-			beg = mat_vec_multiply(rotate_x(m_middle_back_front_slider->GetValue() * 0.10), beg);
-			beg = mat_vec_multiply(translate(0, -50, 0), beg);
+			beg = mat_vec_multiply(trans_upper_back, beg);
+			beg = mat_vec_multiply(rot_upper_back_front, beg);
+			beg = mat_vec_multiply(transback_upper_back, beg);
 
-			en = mat_vec_multiply(translate(0, 50, 0), en);
-			en = mat_vec_multiply(rotate_x(m_middle_back_front_slider->GetValue() * 0.10), en);
-			en = mat_vec_multiply(translate(0, -50, 0), en);
+			en = mat_vec_multiply(trans_upper_back, en);
+			en = mat_vec_multiply(rot_upper_back_front, en);
+			en = mat_vec_multiply(transback_upper_back, en);
 
 
 
 			//ruch lewe przedramie przy middle back do boku
-			beg = mat_vec_multiply(translate(0, 50, 0), beg);
-			beg = mat_vec_multiply(rotate_z((m_middle_back_side_slider->GetValue() - 50.0) * 0.2), beg);
-			beg = mat_vec_multiply(translate(0, -50, 0), beg);
+			beg = mat_vec_multiply(trans_upper_back, beg);
+			beg = mat_vec_multiply(rot_upper_back_side, beg);
+			beg = mat_vec_multiply(transback_upper_back, beg);
 
-			en = mat_vec_multiply(translate(0, 50, 0), en);
-			en = mat_vec_multiply(rotate_z((m_middle_back_side_slider->GetValue() - 50.0) * 0.2), en);
-			en = mat_vec_multiply(translate(0, -50, 0), en);
+			en = mat_vec_multiply(trans_upper_back, en);
+			en = mat_vec_multiply(rot_upper_back_side, en);
+			en = mat_vec_multiply(transback_upper_back, en);
 
 
 
 			//ruch lewe przedramie dolna czesc kregoslupa przod
-			beg = mat_vec_multiply(rotate_x(m_lower_back_front_slider->GetValue() * 0.35), beg);
+			beg = mat_vec_multiply(rot_lower_back_front, beg);
 
-			en = mat_vec_multiply(rotate_x(m_lower_back_front_slider->GetValue() * 0.35), en);
+			en = mat_vec_multiply(rot_lower_back_front, en);
 
 
 			//ruch lewe przedramie dolna czesc kregoslupa boki
-			beg = mat_vec_multiply(rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5), beg);
+			beg = mat_vec_multiply(rot_lower_back_side, beg);
 
-			en = mat_vec_multiply(rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5), en);
+			en = mat_vec_multiply(rot_lower_back_side, en);
 		}
 
 		if (a.name() == "left arm") {
 
 			//do lewej reki w bok
-			beg = mat_vec_multiply(translate(10, 100, 0), beg);
-			beg = mat_vec_multiply(rotate_z((m_left_arm_side_slider->GetValue() - 50.0) * 1.8), beg);
-			beg = mat_vec_multiply(translate(-10, -100, 0), beg);
+			beg = mat_vec_multiply(trans_left_arm, beg);
+			beg = mat_vec_multiply(rot_left_arm_side, beg);
+			beg = mat_vec_multiply(transback_left_arm, beg);
 
 
 			//do lewej reki do przodu
-			beg = mat_vec_multiply(translate(10, 100, 0), beg);
-			beg = mat_vec_multiply(rotate_y(m_left_arm_front_slider->GetValue() * 0.9), beg);
-			beg = mat_vec_multiply(translate(-10, -100, 0), beg);
+			beg = mat_vec_multiply(trans_left_arm, beg);
+			beg = mat_vec_multiply(rot_left_arm_front, beg);
+			beg = mat_vec_multiply(transback_left_arm, beg);
 
 
 
 			//ruch lewej reki przy pochyleniu do przodu middle back
-			beg = mat_vec_multiply(translate(0, 50, 0), beg);
-			beg = mat_vec_multiply(rotate_x(m_middle_back_front_slider->GetValue() * 0.10), beg);
-			beg = mat_vec_multiply(translate(0, -50, 0), beg);
+			beg = mat_vec_multiply(trans_upper_back, beg);
+			beg = mat_vec_multiply(rot_upper_back_front, beg);
+			beg = mat_vec_multiply(transback_upper_back, beg);
 
-			en = mat_vec_multiply(translate(0, 50, 0), en);
-			en = mat_vec_multiply(rotate_x(m_middle_back_front_slider->GetValue() * 0.10), en);
-			en = mat_vec_multiply(translate(0, -50, 0), en);
+			en = mat_vec_multiply(trans_upper_back, en);
+			en = mat_vec_multiply(rot_upper_back_front, en);
+			en = mat_vec_multiply(transback_upper_back, en);
 
 
 
 			//ruch lewa reka przy middle back do boku
-			beg = mat_vec_multiply(translate(0, 50, 0), beg);
-			beg = mat_vec_multiply(rotate_z((m_middle_back_side_slider->GetValue() - 50.0) * 0.2), beg);
-			beg = mat_vec_multiply(translate(0, -50, 0), beg);
+			beg = mat_vec_multiply(trans_upper_back, beg);
+			beg = mat_vec_multiply(rot_upper_back_side, beg);
+			beg = mat_vec_multiply(transback_upper_back, beg);
 
-			en = mat_vec_multiply(translate(0, 50, 0), en);
-			en = mat_vec_multiply(rotate_z((m_middle_back_side_slider->GetValue() - 50.0) * 0.2), en);
-			en = mat_vec_multiply(translate(0, -50, 0), en);
+			en = mat_vec_multiply(trans_upper_back, en);
+			en = mat_vec_multiply(rot_upper_back_side, en);
+			en = mat_vec_multiply(transback_upper_back, en);
 
 
 
 			//ruch lewa reka dolna czesc kregoslupa przod
-			beg = mat_vec_multiply(rotate_x(m_lower_back_front_slider->GetValue() * 0.35), beg);
+			beg = mat_vec_multiply(rot_lower_back_front, beg);
 
-			en = mat_vec_multiply(rotate_x(m_lower_back_front_slider->GetValue() * 0.35), en);
+			en = mat_vec_multiply(rot_lower_back_front, en);
 
 
 			//ruch lewa reka dolna czesc kregoslupa boki
-			beg = mat_vec_multiply(rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5), beg);
+			beg = mat_vec_multiply(rot_lower_back_side, beg);
 
-			en = mat_vec_multiply(rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5), en);
+			en = mat_vec_multiply(rot_lower_back_side, en);
 		}
 
 		if (a.name() == "right forearm") {
 
 			//ruch prawa reka w ³okciu
-			en = mat_vec_multiply(translate(-60, 100, 0), en);
-			en = mat_vec_multiply(rotate_z(-m_right_forearm_slider->GetValue() * 0.9), en);
-			en = mat_vec_multiply(translate(60, -100, 0), en);
+			en = mat_vec_multiply(trans_right_forearm, en);
+			en = mat_vec_multiply(rot_right_forearm, en);
+			en = mat_vec_multiply(transback_right_forearm, en);
 
 
 			//do prawej reki ca³ej w bok
-			beg = mat_vec_multiply(translate(-10, 100, 0), beg);
-			beg = mat_vec_multiply(rotate_z((m_right_arm_side_slider->GetValue() - 50.0) * 1.8), beg);
-			beg = mat_vec_multiply(translate(10, -100, 0), beg);
+			beg = mat_vec_multiply(trans_right_arm, beg);
+			beg = mat_vec_multiply(rot_right_arm_side, beg);
+			beg = mat_vec_multiply(transback_right_arm, beg);
 
-			en = mat_vec_multiply(translate(-10, 100, 0), en);
-			en = mat_vec_multiply(rotate_z((m_right_arm_side_slider->GetValue() - 50.0) * 1.8), en);
-			en = mat_vec_multiply(translate(10, -100, 0), en);
+			en = mat_vec_multiply(trans_right_arm, en);
+			en = mat_vec_multiply(rot_right_arm_side, en);
+			en = mat_vec_multiply(transback_right_arm, en);
 
 
 			//do prawej rek calej do przodu
-			beg = mat_vec_multiply(translate(-10, 100, 0), beg);
-			beg = mat_vec_multiply(rotate_y((m_right_arm_front_slider->GetValue() * 0.9)), beg);
-			beg = mat_vec_multiply(translate(10, -100, 0), beg);
+			beg = mat_vec_multiply(trans_right_arm, beg);
+			beg = mat_vec_multiply(rot_right_arm_front, beg);
+			beg = mat_vec_multiply(transback_right_arm, beg);
 
-			en = mat_vec_multiply(translate(-10, 100, 0), en);
-			en = mat_vec_multiply(rotate_y((m_right_arm_front_slider->GetValue() * 0.9)), en);
-			en = mat_vec_multiply(translate(10, -100, 0), en);
+			en = mat_vec_multiply(trans_right_arm, en);
+			en = mat_vec_multiply(rot_right_arm_front, en);
+			en = mat_vec_multiply(transback_right_arm, en);
 
 
 
 			//ruch prawego przedramienia przy pochyleniu do przodu middle back
-			beg = mat_vec_multiply(translate(0, 50, 0), beg);
-			beg = mat_vec_multiply(rotate_x(m_middle_back_front_slider->GetValue() * 0.10), beg);
-			beg = mat_vec_multiply(translate(0, -50, 0), beg);
+			beg = mat_vec_multiply(trans_upper_back, beg);
+			beg = mat_vec_multiply(rot_upper_back_front, beg);
+			beg = mat_vec_multiply(transback_upper_back, beg);
 
-			en = mat_vec_multiply(translate(0, 50, 0), en);
-			en = mat_vec_multiply(rotate_x(m_middle_back_front_slider->GetValue() * 0.10), en);
-			en = mat_vec_multiply(translate(0, -50, 0), en);
+			en = mat_vec_multiply(trans_upper_back, en);
+			en = mat_vec_multiply(rot_upper_back_front, en);
+			en = mat_vec_multiply(transback_upper_back, en);
 
 
 			
 			//ruch prawe przedramie przy middle back do boku
-			beg = mat_vec_multiply(translate(0, 50, 0), beg);
-			beg = mat_vec_multiply(rotate_z((m_middle_back_side_slider->GetValue() - 50.0) * 0.2), beg);
-			beg = mat_vec_multiply(translate(0, -50, 0), beg);
+			beg = mat_vec_multiply(trans_upper_back, beg);
+			beg = mat_vec_multiply(rot_upper_back_side, beg);
+			beg = mat_vec_multiply(transback_upper_back, beg);
 
-			en = mat_vec_multiply(translate(0, 50, 0), en);
-			en = mat_vec_multiply(rotate_z((m_middle_back_side_slider->GetValue() - 50.0) * 0.2), en);
-			en = mat_vec_multiply(translate(0, -50, 0), en);
+			en = mat_vec_multiply(trans_upper_back, en);
+			en = mat_vec_multiply(rot_upper_back_side, en);
+			en = mat_vec_multiply(transback_upper_back, en);
 
 
 
 			//ruch prawe przedramie dolna czesc kregoslupa przod
-			beg = mat_vec_multiply(rotate_x(m_lower_back_front_slider->GetValue() * 0.35), beg);
+			beg = mat_vec_multiply(rot_lower_back_front, beg);
 
-			en = mat_vec_multiply(rotate_x(m_lower_back_front_slider->GetValue() * 0.35), en);
+			en = mat_vec_multiply(rot_lower_back_front, en);
 
 
 			//ruch prawe przedramie dolna czesc kregoslupa boki
-			beg = mat_vec_multiply(rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5), beg);
+			beg = mat_vec_multiply(rot_lower_back_side, beg);
 
-			en = mat_vec_multiply(rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5), en);
+			en = mat_vec_multiply(rot_lower_back_side, en);
 
 		}
 
 		if (a.name() == "right arm") {
 
 			//do prawej reki w bok
-			en = mat_vec_multiply(translate(-10, 100, 0), en);
-			en = mat_vec_multiply(rotate_z((m_right_arm_side_slider->GetValue() - 50.0) * 1.8), en);
-			en = mat_vec_multiply(translate(10, -100, 0), en);
+			en = mat_vec_multiply(trans_right_arm, en);
+			en = mat_vec_multiply(rot_right_arm_side, en);
+			en = mat_vec_multiply(transback_right_arm, en);
 
 
 			//do prawej reki do przodu
-			en = mat_vec_multiply(translate(-10, 100, 0), en);
-			en = mat_vec_multiply(rotate_y(m_right_arm_front_slider->GetValue() * 0.9), en);
-			en = mat_vec_multiply(translate(10, -100, 0), en);
+			en = mat_vec_multiply(trans_right_arm, en);
+			en = mat_vec_multiply(rot_right_arm_front, en);
+			en = mat_vec_multiply(transback_right_arm, en);
 
 
 
 			//ruch prawej reki przy pochyleniu do przodu middle back
-			beg = mat_vec_multiply(translate(0, 50, 0), beg);
-			beg = mat_vec_multiply(rotate_x(m_middle_back_front_slider->GetValue() * 0.10), beg);
-			beg = mat_vec_multiply(translate(0, -50, 0), beg);
+			beg = mat_vec_multiply(trans_upper_back, beg);
+			beg = mat_vec_multiply(rot_upper_back_front, beg);
+			beg = mat_vec_multiply(transback_upper_back, beg);
 
-			en = mat_vec_multiply(translate(0, 50, 0), en);
-			en = mat_vec_multiply(rotate_x(m_middle_back_front_slider->GetValue() * 0.10), en);
-			en = mat_vec_multiply(translate(0, -50, 0), en);
+			en = mat_vec_multiply(trans_upper_back, en);
+			en = mat_vec_multiply(rot_upper_back_front, en);
+			en = mat_vec_multiply(transback_upper_back, en);
 
 
 
 			//ruch prawa reka przy middle back do boku
-			beg = mat_vec_multiply(translate(0, 50, 0), beg);
-			beg = mat_vec_multiply(rotate_z((m_middle_back_side_slider->GetValue() - 50.0) * 0.2), beg);
-			beg = mat_vec_multiply(translate(0, -50, 0), beg);
+			beg = mat_vec_multiply(trans_upper_back, beg);
+			beg = mat_vec_multiply(rot_upper_back_side, beg);
+			beg = mat_vec_multiply(transback_upper_back, beg);
 
-			en = mat_vec_multiply(translate(0, 50, 0), en);
-			en = mat_vec_multiply(rotate_z((m_middle_back_side_slider->GetValue() - 50.0) * 0.2), en);
-			en = mat_vec_multiply(translate(0, -50, 0), en);
+			en = mat_vec_multiply(trans_upper_back, en);
+			en = mat_vec_multiply(rot_upper_back_side, en);
+			en = mat_vec_multiply(transback_upper_back, en);
 
 
 
 			//ruch prawa reka dolna czesc kregoslupa przod
-			beg = mat_vec_multiply(rotate_x(m_lower_back_front_slider->GetValue() * 0.35), beg);
+			beg = mat_vec_multiply(rot_lower_back_front, beg);
 
-			en = mat_vec_multiply(rotate_x(m_lower_back_front_slider->GetValue() * 0.35), en);
+			en = mat_vec_multiply(rot_lower_back_front, en);
 
 
 			//ruch prawa reka dolna czesc kregoslupa boki
-			beg = mat_vec_multiply(rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5), beg);
+			beg = mat_vec_multiply(rot_lower_back_side, beg);
 
-			en = mat_vec_multiply(rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5), en);
+			en = mat_vec_multiply(rot_lower_back_side, en);
 		}
 
 		if (a.name() == "left tibia") {
 
 			//ruch lewy piszczel
-			en = mat_vec_multiply(translate(20, -65, 0), en);
-			en = mat_vec_multiply(rotate_x(m_left_tibia_slider->GetValue() * 0.9), en);
-			en = mat_vec_multiply(translate(-20, 65, 0), en);
+			en = mat_vec_multiply(trans_left_tibia, en);
+			en = mat_vec_multiply(rot_left_tibia, en);
+			en = mat_vec_multiply(transback_left_tibia, en);
 
 
 			//ruch lewego piszczela przy lewym udzie w bok
-			en = mat_vec_multiply(translate(10, -5, 0), en);
-			en = mat_vec_multiply(rotate_z(m_left_thigh_side_slider->GetValue() * 0.6), en);
-			en = mat_vec_multiply(translate(-10, 5, 0), en);
+			en = mat_vec_multiply(trans_left_thigh, en);
+			en = mat_vec_multiply(rot_left_thigh_side, en);
+			en = mat_vec_multiply(transback_left_thigh, en);
 
-			beg = mat_vec_multiply(translate(10, -5, 0), beg);
-			beg = mat_vec_multiply(rotate_z(m_left_thigh_side_slider->GetValue() * 0.6), beg);
-			beg = mat_vec_multiply(translate(-10, 5, 0), beg);
+			beg = mat_vec_multiply(trans_left_thigh, beg);
+			beg = mat_vec_multiply(rot_left_thigh_side, beg);
+			beg = mat_vec_multiply(transback_left_thigh, beg);
 
 
 			//ruch lewego piszczela przy lewym udzie przod/tyl
-			beg = mat_vec_multiply(translate(10, -5, 0), beg);
-			beg = mat_vec_multiply(rotate_x((m_left_thigh_front_slider->GetValue() - 50.0) * 0.9), beg);
-			beg = mat_vec_multiply(translate(-10, 5, 0), beg);
+			beg = mat_vec_multiply(trans_left_thigh, beg);
+			beg = mat_vec_multiply(rot_left_thigh_front, beg);
+			beg = mat_vec_multiply(transback_left_thigh, beg);
 
-			en = mat_vec_multiply(translate(10, -5, 0), en);
-			en = mat_vec_multiply(rotate_x((m_left_thigh_front_slider->GetValue() - 50.0) * 0.9), en);
-			en = mat_vec_multiply(translate(-10, 5, 0), en);
+			en = mat_vec_multiply(trans_left_thigh, en);
+			en = mat_vec_multiply(rot_left_thigh_front, en);
+			en = mat_vec_multiply(transback_left_thigh, en);
 
 		}
 
 		if (a.name() == "left thigh") {
 
 			//ruch lewe udo bok
-			en = mat_vec_multiply(translate(10, -5, 0), en);
-			en = mat_vec_multiply(rotate_z(m_left_thigh_side_slider->GetValue() * 0.6), en);
-			en = mat_vec_multiply(translate(-10, 5, 0), en);
+			en = mat_vec_multiply(trans_left_thigh, en);
+			en = mat_vec_multiply(rot_left_thigh_side, en);
+			en = mat_vec_multiply(transback_left_thigh, en);
 
 
 			//ruch lewe udo przod tyl
-			en = mat_vec_multiply(translate(10, -5, 0), en);
-			en = mat_vec_multiply(rotate_x((m_left_thigh_front_slider->GetValue() -50.0)* 0.9), en);
-			en = mat_vec_multiply(translate(-10, 5, 0), en);
+			en = mat_vec_multiply(trans_left_thigh, en);
+			en = mat_vec_multiply(rot_left_thigh_front, en);
+			en = mat_vec_multiply(transback_left_thigh, en);
 		}
 
 		if (a.name() == "right tibia") {
 			//ruch prawy piszczel
-			en = mat_vec_multiply(translate(-20, -65, 0), en);
-			en = mat_vec_multiply(rotate_x(m_right_tibia_slider->GetValue() * 0.9), en);
-			en = mat_vec_multiply(translate(20, 65, 0), en);
+			en = mat_vec_multiply(trans_right_tibia, en);
+			en = mat_vec_multiply(rot_right_tibia, en);
+			en = mat_vec_multiply(transback_right_tibia, en);
 
 
 			//ruch prawy piszczel przy prawym udzie w bok
-			en = mat_vec_multiply(translate(-10, -5, 0), en);
-			en = mat_vec_multiply(rotate_z(-m_right_thigh_side_slider->GetValue() * 0.6), en);
-			en = mat_vec_multiply(translate(10, 5, 0), en);
+			en = mat_vec_multiply(trans_right_thigh, en);
+			en = mat_vec_multiply(rot_right_thigh_side, en);
+			en = mat_vec_multiply(transback_right_thigh, en);
 
-			beg = mat_vec_multiply(translate(-10, -5, 0), beg);
-			beg = mat_vec_multiply(rotate_z(-m_right_thigh_side_slider->GetValue() * 0.6), beg);
-			beg = mat_vec_multiply(translate(10, 5, 0), beg);
+			beg = mat_vec_multiply(trans_right_thigh, beg);
+			beg = mat_vec_multiply(rot_right_thigh_side, beg);
+			beg = mat_vec_multiply(transback_right_thigh, beg);
 
 
 			//ruch prawy piszczel przy prawym udzie przod/tyl
-			en = mat_vec_multiply(translate(-10, -5, 0), en);
-			en = mat_vec_multiply(rotate_x((m_right_thigh_front_slider->GetValue() -50.0)* 0.9), en);
-			en = mat_vec_multiply(translate(10, 5, 0), en);
+			en = mat_vec_multiply(trans_right_thigh, en);
+			en = mat_vec_multiply(rot_right_thigh_front, en);
+			en = mat_vec_multiply(transback_right_thigh, en);
 
-			beg = mat_vec_multiply(translate(-10, -5, 0), beg);
-			beg = mat_vec_multiply(rotate_x((m_right_thigh_front_slider->GetValue() - 50.0) * 0.9), beg);
-			beg = mat_vec_multiply(translate(10, 5, 0), beg);
+			beg = mat_vec_multiply(trans_right_thigh, beg);
+			beg = mat_vec_multiply(rot_right_thigh_front, beg);
+			beg = mat_vec_multiply(transback_right_thigh, beg);
 
 			
 		}
 
 		if (a.name() == "right thigh") {
 			//ruch prawe udo bok
-			en = mat_vec_multiply(translate(-10, -5, 0), en);
-			en = mat_vec_multiply(rotate_z(-m_right_thigh_side_slider->GetValue() * 0.6), en);
-			en = mat_vec_multiply(translate(10, 5, 0), en);
+			en = mat_vec_multiply(trans_right_thigh, en);
+			en = mat_vec_multiply(rot_right_thigh_side, en);
+			en = mat_vec_multiply(transback_right_thigh, en);
 
 			//ruch prawe udo przod/tyl
-			en = mat_vec_multiply(translate(-10, -5, 0), en);
-			en = mat_vec_multiply(rotate_x((m_right_thigh_front_slider->GetValue() -50.0)* 0.9), en);
-			en = mat_vec_multiply(translate(10, 5, 0), en);
+			en = mat_vec_multiply(trans_right_thigh, en);
+			en = mat_vec_multiply(rot_right_thigh_front, en);
+			en = mat_vec_multiply(transback_right_thigh, en);
 		}
 
 		if (a.name() == "upper backbone") {
 			//ruch gornej czesci kregoslupa w przod
-			beg = mat_vec_multiply(translate(0, 50, 0), beg);
-			beg = mat_vec_multiply(rotate_x(m_middle_back_front_slider->GetValue() * 0.10), beg);
-			beg = mat_vec_multiply(translate(0, -50, 0), beg);
+			beg = mat_vec_multiply(trans_upper_back, beg);
+			beg = mat_vec_multiply(rot_upper_back_front, beg);
+			beg = mat_vec_multiply(transback_upper_back, beg);
 
 
 			//ruch gornej czesci kregoslupa w bok
-			beg = mat_vec_multiply(translate(0, 50, 0), beg);
-			beg = mat_vec_multiply(rotate_z((m_middle_back_side_slider->GetValue()-50.0) * 0.2), beg);
-			beg = mat_vec_multiply(translate(0, -50, 0), beg);
+			beg = mat_vec_multiply(trans_upper_back, beg);
+			beg = mat_vec_multiply(rot_upper_back_side, beg);
+			beg = mat_vec_multiply(transback_upper_back, beg);
 
 
 			//ruch gorna czesc kregoslupa dolna czesc kregoslupa przod
-			beg = mat_vec_multiply(rotate_x(m_lower_back_front_slider->GetValue() * 0.35), beg);
+			beg = mat_vec_multiply(rot_lower_back_front, beg);
 
-			en = mat_vec_multiply(rotate_x(m_lower_back_front_slider->GetValue() * 0.35), en);
+			en = mat_vec_multiply(rot_lower_back_front, en);
 
 
 			//ruch gorna czesc kregoslupa dolna czesc kregoslupa boki
-			beg = mat_vec_multiply(rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5), beg);
+			beg = mat_vec_multiply(rot_lower_back_side, beg);
 
-			en = mat_vec_multiply(rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5), en);
+			en = mat_vec_multiply(rot_lower_back_side, en);
 		}
 
 		if (a.name() == "lower backbone") {
 			//ruch dolnej czesci kregoslupa przod
-			beg = mat_vec_multiply(rotate_x(m_lower_back_front_slider->GetValue() * 0.35), beg);
+			beg = mat_vec_multiply(rot_lower_back_front, beg);
 
 			//ruch dolnej czesci kregoslupa boki
-			beg = mat_vec_multiply(rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5), beg);
+			beg = mat_vec_multiply(rot_lower_back_side, beg);
 		}
 
 
@@ -544,4 +602,13 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 
 		dc.DrawLine(beg.X(), beg.Y(), en.X(), en.Y());
 	}
+
+	/*for (auto& j : _joints) {
+		Vec cen = j.center();
+		
+		cen = mat_vec_multiply(rot, cen);
+		cen = mat_vec_multiply(trans, cen);
+		
+		dc.DrawCircle(cen.X(), cen.Y(), j.radius());
+	}*/
 }
