@@ -18,6 +18,10 @@
 #include <wx/sizer.h>
 #include <wx/slider.h>
 #include <wx/stattext.h>
+#include <wx/bitmap.h>
+#include <wx/image.h>
+#include <wx/icon.h>
+#include <wx/button.h>
 #include <wx/frame.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -64,6 +68,7 @@ class MyFrame1 : public wxFrame
 		wxStaticText* m_staticText18;
 		wxSlider* m_lower_back_side_slider;
 		wxStaticText* m_staticText151;
+		wxButton* m_button1;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void m_panel2OnLeftDown( wxMouseEvent& event ) { event.Skip(); }
@@ -71,7 +76,7 @@ class MyFrame1 : public wxFrame
 		virtual void m_panel2OnMotion( wxMouseEvent& event ) { event.Skip(); }
 		virtual void m_panel2OnPaint( wxPaintEvent& event ) { event.Skip(); }
 		virtual void m_panel2OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
-		virtual void m_slider4OnScroll( wxScrollEvent& event ) { event.Skip(); }
+		virtual void m_button1OnButtonClick( wxCommandEvent& event ) { event.Skip(); }
 
 
 	public:

@@ -148,6 +148,9 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_staticText151->Wrap( -1 );
 	bSizer7->Add( m_staticText151, 0, wxALIGN_CENTER, 5 );
 
+	m_button1 = new wxButton( this, wxID_ANY, wxT("Reset"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer7->Add( m_button1, 0, wxALIGN_CENTER|wxALL, 5 );
+
 
 	bSizer1->Add( bSizer7, 0, wxEXPAND, 5 );
 
@@ -163,15 +166,7 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_panel2->Connect( wxEVT_MOTION, wxMouseEventHandler( MyFrame1::m_panel2OnMotion ), NULL, this );
 	m_panel2->Connect( wxEVT_PAINT, wxPaintEventHandler( MyFrame1::m_panel2OnPaint ), NULL, this );
 	m_panel2->Connect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( MyFrame1::m_panel2OnUpdateUI ), NULL, this );
-	m_left_forearm_slider->Connect( wxEVT_SCROLL_TOP, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_left_forearm_slider->Connect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_left_forearm_slider->Connect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_left_forearm_slider->Connect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_left_forearm_slider->Connect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_left_forearm_slider->Connect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_left_forearm_slider->Connect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_left_forearm_slider->Connect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_left_forearm_slider->Connect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_button1->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame1::m_button1OnButtonClick ), NULL, this );
 }
 
 MyFrame1::~MyFrame1()
@@ -182,14 +177,6 @@ MyFrame1::~MyFrame1()
 	m_panel2->Disconnect( wxEVT_MOTION, wxMouseEventHandler( MyFrame1::m_panel2OnMotion ), NULL, this );
 	m_panel2->Disconnect( wxEVT_PAINT, wxPaintEventHandler( MyFrame1::m_panel2OnPaint ), NULL, this );
 	m_panel2->Disconnect( wxEVT_UPDATE_UI, wxUpdateUIEventHandler( MyFrame1::m_panel2OnUpdateUI ), NULL, this );
-	m_left_forearm_slider->Disconnect( wxEVT_SCROLL_TOP, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_left_forearm_slider->Disconnect( wxEVT_SCROLL_BOTTOM, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_left_forearm_slider->Disconnect( wxEVT_SCROLL_LINEUP, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_left_forearm_slider->Disconnect( wxEVT_SCROLL_LINEDOWN, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_left_forearm_slider->Disconnect( wxEVT_SCROLL_PAGEUP, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_left_forearm_slider->Disconnect( wxEVT_SCROLL_PAGEDOWN, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_left_forearm_slider->Disconnect( wxEVT_SCROLL_THUMBTRACK, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_left_forearm_slider->Disconnect( wxEVT_SCROLL_THUMBRELEASE, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
-	m_left_forearm_slider->Disconnect( wxEVT_SCROLL_CHANGED, wxScrollEventHandler( MyFrame1::m_slider4OnScroll ), NULL, this );
+	m_button1->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame1::m_button1OnButtonClick ), NULL, this );
 
 }
