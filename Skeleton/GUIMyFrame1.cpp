@@ -70,10 +70,26 @@ wxClientDC dcClient(m_panel2);
 draw(dcClient);
 }
 
-void GUIMyFrame1::m_slider4OnScroll( wxScrollEvent& event )
+void GUIMyFrame1::m_button1OnButtonClick( wxCommandEvent& event )
 {
-// TODO: Implement m_slider4OnScroll
+m_left_forearm_slider->SetValue(0);
+m_right_forearm_slider->SetValue(0);
+m_left_arm_side_slider->SetValue(50);
+m_right_arm_side_slider->SetValue(50);
+m_left_arm_front_slider->SetValue(0);
+m_right_arm_front_slider->SetValue(0);
+m_left_tibia_slider->SetValue(0);
+m_right_tibia_slider->SetValue(0);
+m_left_thigh_side_slider->SetValue(0);
+m_right_thigh_side_slider->SetValue(0);
+m_left_thigh_front_slider->SetValue(50);
+m_right_thigh_front_slider->SetValue(50);
+m_middle_back_front_slider->SetValue(0);
+m_middle_back_side_slider->SetValue(50);
+m_lower_back_front_slider->SetValue(0);
+m_lower_back_side_slider->SetValue(50);
 }
+
 
 
 void GUIMyFrame1::draw(wxClientDC& dcClient) 
@@ -477,7 +493,6 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 		}
 
 		if (a.name() == "left tibia") {
-
 			//ruch lewy piszczel
 			en = mat_vec_multiply(trans_left_tibia, en);
 			en = mat_vec_multiply(rot_left_tibia, en);
@@ -603,12 +618,177 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 		dc.DrawLine(beg.X(), beg.Y(), en.X(), en.Y());
 	}
 
-	/*for (auto& j : _joints) {
+	for (auto& j : _joints) {
 		Vec cen = j.center();
 		
+		if (j.name() == "left elbow") {
+			//lewy staw lokiec bok w ramieniu
+			cen = mat_vec_multiply(trans_left_arm, cen);
+			cen = mat_vec_multiply(rot_left_arm_side, cen);
+			cen = mat_vec_multiply(transback_left_arm, cen);
+
+
+			//lewy staw lokiec przod w ramieniu
+			cen = mat_vec_multiply(trans_left_arm, cen);
+			cen = mat_vec_multiply(rot_left_arm_front, cen);
+			cen = mat_vec_multiply(transback_left_arm, cen);
+
+
+			//ruch lewy staw lokiec przy pochyleniu do przodu middle back
+			cen = mat_vec_multiply(trans_upper_back, cen);
+			cen = mat_vec_multiply(rot_upper_back_front, cen);
+			cen = mat_vec_multiply(transback_upper_back, cen);
+
+
+			//ruch lewy staw lokiec przy middle back do boku
+			cen = mat_vec_multiply(trans_upper_back, cen);
+			cen = mat_vec_multiply(rot_upper_back_side, cen);
+			cen = mat_vec_multiply(transback_upper_back, cen);
+
+
+			//ruch lewy lokiec dolna czesc kregoslupa przod
+			cen = mat_vec_multiply(rot_lower_back_front, cen);
+
+
+			//ruch lewy lokiec dolna czesc kregoslupa boki
+			cen = mat_vec_multiply(rot_lower_back_side, cen);
+
+		}
+
+		if (j.name() == "left shoulder") {
+			//lewy bark przod w middle back
+			cen = mat_vec_multiply(trans_upper_back, cen);
+			cen = mat_vec_multiply(rot_upper_back_front, cen);
+			cen = mat_vec_multiply(transback_upper_back, cen);
+
+			//lewy bark bok w middle back
+			cen = mat_vec_multiply(trans_upper_back, cen);
+			cen = mat_vec_multiply(rot_upper_back_side, cen);
+			cen = mat_vec_multiply(transback_upper_back, cen);
+
+			//ruch lewy bark dolna czesc kregoslupa przod
+			cen = mat_vec_multiply(rot_lower_back_front, cen);
+
+
+			//ruch lewy bark dolna czesc kregoslupa boki
+			cen = mat_vec_multiply(rot_lower_back_side, cen);
+		}
+
+		if (j.name() == "neck") {
+			//ruch kark przy pochyleniu do przodu middle back
+			cen = mat_vec_multiply(trans_upper_back, cen);
+			cen = mat_vec_multiply(rot_upper_back_front, cen);
+			cen = mat_vec_multiply(transback_upper_back, cen);
+
+			//ruch akrk przy middle back do boku
+			cen = mat_vec_multiply(trans_upper_back, cen);
+			cen = mat_vec_multiply(rot_upper_back_side, cen);
+			cen = mat_vec_multiply(transback_upper_back, cen);
+
+			//ruch kark dolna czesc kregoslupa przod
+			cen = mat_vec_multiply(rot_lower_back_front, cen);
+
+			//ruch akrk dolna czesc kregoslupa boki
+			cen = mat_vec_multiply(rot_lower_back_side, cen);
+		}
+
+		if (j.name() == "right shoulder") {
+			//ruch lewego barku przy pochyleniu do przodu middle back
+			cen = mat_vec_multiply(trans_upper_back, cen);
+			cen = mat_vec_multiply(rot_upper_back_front, cen);
+			cen = mat_vec_multiply(transback_upper_back, cen);
+
+			//ruch prawy bark przy middle back do boku
+			cen = mat_vec_multiply(trans_upper_back, cen);
+			cen = mat_vec_multiply(rot_upper_back_side, cen);
+			cen = mat_vec_multiply(transback_upper_back, cen);
+
+			//ruch prawy bark dolna czesc kregoslupa przod
+			cen = mat_vec_multiply(rot_lower_back_front, cen);
+
+			//ruch prawy bark dolna czesc kregoslupa boki
+			cen = mat_vec_multiply(rot_lower_back_side, cen);
+		}
+
+		if (j.name() == "right elbow") {
+			//prawy staw lokiec bok w ramieniu
+			cen = mat_vec_multiply(trans_right_arm, cen);
+			cen = mat_vec_multiply(rot_right_arm_side, cen);
+			cen = mat_vec_multiply(transback_right_arm, cen);
+
+
+			//prawy staw lokiec przod w ramieniu
+			cen = mat_vec_multiply(trans_right_arm, cen);
+			cen = mat_vec_multiply(rot_right_arm_front, cen);
+			cen = mat_vec_multiply(transback_right_arm, cen);
+
+
+			//ruch prawy staw lokiec przy pochyleniu do przodu middle back
+			cen = mat_vec_multiply(trans_upper_back, cen);
+			cen = mat_vec_multiply(rot_upper_back_front, cen);
+			cen = mat_vec_multiply(transback_upper_back, cen);
+
+
+			//ruch prawy staw lokiec przy middle back do boku
+			cen = mat_vec_multiply(trans_upper_back, cen);
+			cen = mat_vec_multiply(rot_upper_back_side, cen);
+			cen = mat_vec_multiply(transback_upper_back, cen);
+
+
+			//ruch prawy lokiec dolna czesc kregoslupa przod
+			cen = mat_vec_multiply(rot_lower_back_front, cen);
+
+
+			//ruch prawy lokiec dolna czesc kregoslupa boki
+			cen = mat_vec_multiply(rot_lower_back_side, cen);
+		}
+
+		if (j.name() == "upper back") {
+			//ruch gornej czesci kregoslupa w przod
+			cen = mat_vec_multiply(trans_upper_back, cen);
+			cen = mat_vec_multiply(rot_upper_back_front, cen);
+			cen = mat_vec_multiply(transback_upper_back, cen);
+
+
+			//ruch gornej czesci kregoslupa w bok
+			cen = mat_vec_multiply(trans_upper_back, cen);
+			cen = mat_vec_multiply(rot_upper_back_side, cen);
+			cen = mat_vec_multiply(transback_upper_back, cen);
+
+			//ruch gorna czesc kregoslupa dolna czesc kregoslupa przod
+			cen = mat_vec_multiply(rot_lower_back_front, cen);
+
+			//ruch gorna czesc kregoslupa dolna czesc kregoslupa boki
+			cen = mat_vec_multiply(rot_lower_back_side, cen);
+		}
+
+		if (j.name() == "left knee") {
+			//ruch lewe kolano przy lewym udzie w bok
+			cen = mat_vec_multiply(trans_left_thigh, cen);
+			cen = mat_vec_multiply(rot_left_thigh_side, cen);
+			cen = mat_vec_multiply(transback_left_thigh, cen);
+
+			//ruch lewe kolano przy lewym udzie przod/tyl
+			cen = mat_vec_multiply(trans_left_thigh, cen);
+			cen = mat_vec_multiply(rot_left_thigh_front, cen);
+			cen = mat_vec_multiply(transback_left_thigh, cen);
+		}
+
+		if (j.name() == "right knee") {
+			//ruch prawe kolano przy prawym udzie w bok
+			cen = mat_vec_multiply(trans_right_thigh, cen);
+			cen = mat_vec_multiply(rot_right_thigh_side, cen);
+			cen = mat_vec_multiply(transback_right_thigh, cen);
+
+			//ruch prawe kolano przy prawym udzie przod/tyl
+			cen = mat_vec_multiply(trans_right_thigh, cen);
+			cen = mat_vec_multiply(rot_right_thigh_front, cen);
+			cen = mat_vec_multiply(transback_right_thigh, cen);
+		}
+
 		cen = mat_vec_multiply(rot, cen);
 		cen = mat_vec_multiply(trans, cen);
 		
 		dc.DrawCircle(cen.X(), cen.Y(), j.radius());
-	}*/
+	}
 }
