@@ -128,7 +128,7 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 
 	Matrix trans_right_arm = translate(-10, 100, 0);
 	Matrix rot_right_arm_side = rotate_z((m_right_arm_side_slider->GetValue() - 50.0) * 1.8);
-	Matrix rot_right_arm_front = rotate_y(m_right_arm_front_slider->GetValue() * 0.9);
+	Matrix rot_right_arm_front = rotate_y(-m_right_arm_front_slider->GetValue() * 0.9);
 	Matrix transback_right_arm = translate(10, -100, 0);
 
 	Matrix trans_left_tibia = translate(20, -65, 0);
