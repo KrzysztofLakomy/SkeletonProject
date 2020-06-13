@@ -22,6 +22,10 @@
 #include <wx/image.h>
 #include <wx/icon.h>
 #include <wx/button.h>
+#include <wx/textctrl.h>
+#include <wx/statbox.h>
+#include <wx/checkbox.h>
+#include <wx/timer.h>
 #include <wx/frame.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -36,6 +40,7 @@ class MyFrame1 : public wxFrame
 
 	protected:
 		wxPanel* m_panel2;
+		wxPanel* m_timeline_panel;
 		wxSlider* m_left_forearm_slider;
 		wxStaticText* m_staticText9;
 		wxSlider* m_left_arm_side_slider;
@@ -69,6 +74,15 @@ class MyFrame1 : public wxFrame
 		wxSlider* m_lower_back_side_slider;
 		wxStaticText* m_staticText151;
 		wxButton* m_button1;
+		wxTextCtrl* m_amountOfFramesText;
+		wxButton* m_enableAnimationButton;
+		wxButton* m_saveFrameButton;
+		wxStaticText* m_staticText181;
+		wxTextCtrl* m_selectedFrameText;
+		wxCheckBox* m_repeatCheckBox;
+		wxButton* m_startAnimationButton;
+		wxButton* m_stopButton;
+		wxTimer m_animationTimer;
 
 		// Virtual event handlers, overide them in your derived class
 		virtual void m_panel2OnLeftDown( wxMouseEvent& event ) { event.Skip(); }
@@ -76,12 +90,20 @@ class MyFrame1 : public wxFrame
 		virtual void m_panel2OnMotion( wxMouseEvent& event ) { event.Skip(); }
 		virtual void m_panel2OnPaint( wxPaintEvent& event ) { event.Skip(); }
 		virtual void m_panel2OnUpdateUI( wxUpdateUIEvent& event ) { event.Skip(); }
+		virtual void onTimelineClick( wxMouseEvent& event ) { event.Skip(); }
+		virtual void onTimelinePaint( wxPaintEvent& event ) { event.Skip(); }
+		virtual void onTimelineUpdate( wxUpdateUIEvent& event ) { event.Skip(); }
 		virtual void m_button1OnButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onEnableAnimationClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSaveFrameConfigurationClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onStartAnimationButonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onStopButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onTimerTick( wxTimerEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		MyFrame1( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 887,574 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		MyFrame1( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 880,783 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 
 		~MyFrame1();
 
