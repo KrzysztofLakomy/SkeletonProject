@@ -1,10 +1,10 @@
 #include "GUIMyFrame1.h"
 
-GUIMyFrame1::GUIMyFrame1( wxWindow* parent )
-:
-MyFrame1( parent )
+GUIMyFrame1::GUIMyFrame1(wxWindow* parent)
+	:
+	MyFrame1(parent)
 {
-	_bones.push_back(Line(Vec(-100,-102,0), Vec(-60,-100,0), "left forearm"));
+	_bones.push_back(Line(Vec(-100, -102, 0), Vec(-60, -100, 0), "left forearm"));
 	_bones.push_back(Line(Vec(-60, -100, 0), Vec(-10, -100, 0), "left arm"));
 	_bones.push_back(Line(Vec(-10, -100, 0), Vec(0, -100, 0), "left shoulder"));
 	_bones.push_back(Line(Vec(0, -100, 0), Vec(0, -110, 0), "neck"));
@@ -32,67 +32,228 @@ MyFrame1( parent )
 	_joints.push_back(Circle(Vec(-20, 65, 0), "left knee"));
 	_joints.push_back(Circle(Vec(20, 65, 0), "right knee"));
 
+
+	sliders.push_back(m_left_forearm_slider);
+	sliders.push_back(m_right_forearm_slider);
+	sliders.push_back(m_left_arm_side_slider);
+	sliders.push_back(m_right_arm_side_slider);
+	sliders.push_back(m_left_arm_front_slider);
+	sliders.push_back(m_right_arm_front_slider);
+	sliders.push_back(m_left_tibia_slider);
+	sliders.push_back(m_right_tibia_slider);
+	sliders.push_back(m_left_thigh_side_slider);
+	sliders.push_back(m_right_thigh_side_slider);
+	sliders.push_back(m_left_thigh_front_slider);
+	sliders.push_back(m_right_thigh_front_slider);
+	sliders.push_back(m_middle_back_front_slider);
+	sliders.push_back(m_middle_back_side_slider);
+	sliders.push_back(m_lower_back_front_slider);
+	sliders.push_back(m_lower_back_side_slider);
+
+	if (m_pLogFile == NULL)
+	{
+		m_pLogFile = fopen("log.txt", "w+");
+		delete wxLog::SetActiveTarget(new wxLogStderr(m_pLogFile));
+	}
 }
 
-void GUIMyFrame1::m_panel2OnLeftDown( wxMouseEvent& event )
+void GUIMyFrame1::m_panel2OnLeftDown(wxMouseEvent& event)
 {
-    start_point = event.GetPosition();
-    is_panel_clicked = true;
-    m_panel2->Refresh();
+	start_point = event.GetPosition();
+	is_panel_clicked = true;
+	m_panel2->Refresh();
 }
 
-void GUIMyFrame1::m_panel2OnLeftUp( wxMouseEvent& event )
+void GUIMyFrame1::m_panel2OnLeftUp(wxMouseEvent& event)
 {
-    start_point = wxPoint(0, 0);
-    is_panel_clicked = false;
+	start_point = wxPoint(0, 0);
+	is_panel_clicked = false;
 }
 
-void GUIMyFrame1::m_panel2OnMotion( wxMouseEvent& event )
+void GUIMyFrame1::m_panel2OnMotion(wxMouseEvent& event)
 {
-    if (event.LeftIsDown()&& is_panel_clicked) {
-        alpha = static_cast<double>(event.GetPosition().x) - static_cast<double>(start_point.x);
-        beta = static_cast<double>(start_point.y) - static_cast<double>(event.GetPosition().y);
-    }
-    m_panel2->Refresh();
+	if (event.LeftIsDown() && is_panel_clicked) {
+		alpha = static_cast<double>(event.GetPosition().x) - static_cast<double>(start_point.x);
+		beta = static_cast<double>(start_point.y) - static_cast<double>(event.GetPosition().y);
+	}
+	m_panel2->Refresh();
 }
 
-void GUIMyFrame1::m_panel2OnPaint( wxPaintEvent& event )
+void GUIMyFrame1::m_panel2OnPaint(wxPaintEvent& event)
 {
-    wxClientDC dcClient(m_panel2);
-    m_panel2->Refresh();
-    m_panel2->Update();
-    draw(dcClient);
+	wxClientDC dcClient(m_panel2);
+	m_panel2->Refresh();
+	m_panel2->Update();
+	draw(dcClient);
 }
 
-void GUIMyFrame1::m_panel2OnUpdateUI( wxUpdateUIEvent& event )
+void GUIMyFrame1::m_panel2OnUpdateUI(wxUpdateUIEvent& event)
 {
-    wxClientDC dcClient(m_panel2);
-    draw(dcClient);
+	wxClientDC dcClient(m_panel2);
+	draw(dcClient);
 }
 
-void GUIMyFrame1::m_button1OnButtonClick( wxCommandEvent& event )
+void GUIMyFrame1::onTimelineClick(wxMouseEvent& event)
 {
-    m_left_forearm_slider->SetValue(0);
-    m_right_forearm_slider->SetValue(0);
-    m_left_arm_side_slider->SetValue(50);
-    m_right_arm_side_slider->SetValue(50);
-    m_left_arm_front_slider->SetValue(0);
-    m_right_arm_front_slider->SetValue(0);
-    m_left_tibia_slider->SetValue(0);
-    m_right_tibia_slider->SetValue(0);
-    m_left_thigh_side_slider->SetValue(0);
-    m_right_thigh_side_slider->SetValue(0);
-    m_left_thigh_front_slider->SetValue(50);
-    m_right_thigh_front_slider->SetValue(50);
-    m_middle_back_front_slider->SetValue(0);
-    m_middle_back_side_slider->SetValue(50);
-    m_lower_back_front_slider->SetValue(0);
-    m_lower_back_side_slider->SetValue(50);
+	wxPoint clickPoint = event.GetPosition();
+	sort(framesConfig.begin(), framesConfig.end());
+	int width, height;
+	m_timeline_panel->GetSize(&width, &height);
+	if (is_enableAnimation_clicked) {
+		for (int i = 0; i < linesPosition.size(); i++) {
+			if (clickPoint.x >= 0 && clickPoint.x < linesPosition[0].x) {
+
+				configurableFrames.push_back(0);
+				selectedFrame = 0;
+				m_selectedFrameText->SetValue(wxString::Format(wxT("%i"), 1));
+				int index = myFind(framesConfig, 0);
+				if (index != -1) {
+					setSlidersPosition(framesConfig[index].second);
+				}
+				else {
+					reset();
+				}
+			}
+			else if (clickPoint.x < linesPosition[i].x && clickPoint.x >= linesPosition[i - 1].x) {
+				configurableFrames.push_back(i);
+				m_selectedFrameText->SetLabelText(wxString::Format(wxT("%i"), i + 1));
+				selectedFrame = i;
+				int index = myFind(framesConfig, i);
+				if (index != -1) {
+					setSlidersPosition(framesConfig[index].second);
+				}
+				else {
+					reset();
+				}
+			}
+		}
+	}
+}
+
+void GUIMyFrame1::onTimelinePaint(wxPaintEvent& event)
+{
+	wxClientDC dcClientTimeline(m_timeline_panel);
+	m_timeline_panel->Refresh();
+	m_timeline_panel->Update();
+	drawForAnimation(dcClientTimeline);
+
+}
+
+void GUIMyFrame1::onTimelineUpdate(wxUpdateUIEvent& event)
+{
+	wxClientDC dcClientTimeline(m_timeline_panel);
+	drawForAnimation(dcClientTimeline);
+}
+
+void GUIMyFrame1::m_button1OnButtonClick(wxCommandEvent& event)
+{
+
+	reset();
+}
+
+void GUIMyFrame1::onEnableAnimationClicked(wxCommandEvent& event)
+{
+	is_enableAnimation_clicked = !is_enableAnimation_clicked;
+	animationVector.clear();
+	if (!is_enableAnimation_clicked)
+		m_enableAnimationButton->SetLabelText("Enable Animation");
+	else
+		m_enableAnimationButton->SetLabelText("Disable Animation");
+
+}
+
+void GUIMyFrame1::onSaveFrameConfigurationClicked(wxCommandEvent& event)
+{
+	saveSliders();
+}
+
+void GUIMyFrame1::onStartAnimationButonClick(wxCommandEvent& event)
+{
+	if (myFind(framesConfig, 0) == -1) {
+		reset();
+		selectedFrame = 0;
+		saveSliders();
+	}
+	is_startAnimation_clicked = !is_startAnimation_clicked;
+	sort(framesConfig.begin(), framesConfig.end());
+	selectedFrame = 0;
+	std::vector<int> howToChange;
+
+	int a = 0;
+	int b = 0;
+	for (int i = 0; i < framesConfig.size(); i++) {
+		howToChange.clear();
+		if (i == 0) {
+			for (int j = 0; j < framesConfig[i].second.size(); j++) {
+				a = (framesConfig[i].second[j] - sliders[j]->GetValue());
+				howToChange.push_back(a);
+			}
+			animationVector.push_back(howToChange);
+		}
+		else {
+			for (int j = 0; j < framesConfig[i].second.size(); j++) {
+				a = (framesConfig[i].second[j] - framesConfig[i - 1].second[j]);
+
+				if (a != 0) {
+					b = (framesConfig[i].first - framesConfig[i - 1].first);
+					howToChange.push_back(a / b);
+				}
+				else {
+					howToChange.push_back(0);
+				}
+			}
+		}
+		for (int j = 0; j < b; j++)
+			animationVector.push_back(howToChange);
+	}
+}
+
+void GUIMyFrame1::onStopButtonClick(wxCommandEvent& event)
+{
+	m_animationTimer.Stop();
+}
+
+void GUIMyFrame1::onTimerTick(wxTimerEvent& event)
+{
+	animate();
 }
 
 
+void GUIMyFrame1::reset()
+{
+	m_left_forearm_slider->SetValue(0);
+	m_right_forearm_slider->SetValue(0);
+	m_left_arm_side_slider->SetValue(50);
+	m_right_arm_side_slider->SetValue(50);
+	m_left_arm_front_slider->SetValue(0);
+	m_right_arm_front_slider->SetValue(0);
+	m_left_tibia_slider->SetValue(0);
+	m_right_tibia_slider->SetValue(0);
+	m_left_thigh_side_slider->SetValue(0);
+	m_right_thigh_side_slider->SetValue(0);
+	m_left_thigh_front_slider->SetValue(50);
+	m_right_thigh_front_slider->SetValue(50);
+	m_middle_back_front_slider->SetValue(0);
+	m_middle_back_side_slider->SetValue(50);
+	m_lower_back_front_slider->SetValue(0);
+	m_lower_back_side_slider->SetValue(50);
+}
 
-void GUIMyFrame1::draw(wxClientDC& dcClient) 
+void GUIMyFrame1::saveSliders()
+{
+	std::vector<int> slidersValues;
+	for (auto& element : sliders) {
+		slidersValues.push_back(element->GetValue());
+	}
+	int index = myFind(framesConfig, selectedFrame);
+	savedFrames.push_back(selectedFrame);
+	if (index == -1)
+		framesConfig.push_back(make_pair(selectedFrame, slidersValues));
+	else
+		framesConfig[index].second = slidersValues;
+}
+
+void GUIMyFrame1::draw(wxClientDC& dcClient)
 {
 	wxBufferedDC dc(&dcClient);
 	PrepareDC(dc);
@@ -102,9 +263,10 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 	int w, h;
 	m_panel2->GetSize(&w, &h);
 
-	dc.SetPen(wxPen(wxColor(0,0,0),2));
 
-	
+	dc.SetPen(wxPen(wxColor(0, 0, 0), 2));
+
+
 	Matrix trans = translate(w / 2.0, h / 2.0, 0);
 
 	//do obracania szkieletem
@@ -128,7 +290,7 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 
 	Matrix trans_right_arm = translate(-10, 100, 0);
 	Matrix rot_right_arm_side = rotate_z((m_right_arm_side_slider->GetValue() - 50.0) * 1.8);
-	Matrix rot_right_arm_front = rotate_y(-m_right_arm_front_slider->GetValue() * 0.9);
+	Matrix rot_right_arm_front = rotate_y(m_right_arm_front_slider->GetValue() * 0.9);
 	Matrix transback_right_arm = translate(10, -100, 0);
 
 	Matrix trans_left_tibia = translate(20, -65, 0);
@@ -153,14 +315,14 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 	Matrix rot_upper_back_front = rotate_x(m_middle_back_front_slider->GetValue() * 0.10);
 	Matrix rot_upper_back_side = rotate_z((m_middle_back_side_slider->GetValue() - 50.0) * 0.2);
 	Matrix transback_upper_back = translate(0, -50, 0);
-	
+
 	Matrix rot_lower_back_front = rotate_x(m_lower_back_front_slider->GetValue() * 0.35);
 	Matrix rot_lower_back_side = rotate_z((m_lower_back_side_slider->GetValue() - 50.0) * 0.5);
 
 	for (auto& a : _bones) {
 		Vec beg = a.begin();
 		Vec en = a.end();
-		
+
 		if (a.name() == "neck") {
 			//ruch szyi przy pochyleniu do przodu middle back
 			beg = mat_vec_multiply(trans_upper_back, beg);
@@ -227,7 +389,7 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 			beg = mat_vec_multiply(rot_lower_back_side, beg);
 
 			en = mat_vec_multiply(rot_lower_back_side, en);
-			
+
 		}
 
 		if (a.name() == "right shoulder") {
@@ -270,10 +432,10 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 		if (a.name() == "left forearm") {
 			//ruch lewa reka w ³okciu
 			beg = mat_vec_multiply(trans_left_forearm, beg);
-			beg = mat_vec_multiply(rot_left_forearm,beg);
+			beg = mat_vec_multiply(rot_left_forearm, beg);
 			beg = mat_vec_multiply(transback_left_forearm, beg);
 
-			
+
 			//do lewej reki ca³ej w bok
 			beg = mat_vec_multiply(trans_left_arm, beg);
 			beg = mat_vec_multiply(rot_left_arm_side, beg);
@@ -418,7 +580,7 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 			en = mat_vec_multiply(transback_upper_back, en);
 
 
-			
+
 			//ruch prawe przedramie przy middle back do boku
 			beg = mat_vec_multiply(trans_upper_back, beg);
 			beg = mat_vec_multiply(rot_upper_back_side, beg);
@@ -560,7 +722,7 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 			beg = mat_vec_multiply(rot_right_thigh_front, beg);
 			beg = mat_vec_multiply(transback_right_thigh, beg);
 
-			
+
 		}
 
 		if (a.name() == "right thigh") {
@@ -620,7 +782,7 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 
 	for (auto& j : _joints) {
 		Vec cen = j.center();
-		
+
 		if (j.name() == "left elbow") {
 			//lewy staw lokiec bok w ramieniu
 			cen = mat_vec_multiply(trans_left_arm, cen);
@@ -788,7 +950,100 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 
 		cen = mat_vec_multiply(rot, cen);
 		cen = mat_vec_multiply(trans, cen);
-		
+
 		dc.DrawCircle(cen.X(), cen.Y(), j.radius());
+
+		if (is_startAnimation_clicked) {
+			int amountOfFrames = wxAtoi(m_amountOfFramesText->GetValue());
+			m_animationTimer.Start(5000 / amountOfFrames, true);
+		}
+	}
+}
+
+int GUIMyFrame1::myFind(std::vector<std::pair<int, std::vector<int>>> whereToLookFor, int whatToLookFor)
+{
+	for (int i = 0; i < whereToLookFor.size(); i++) {
+		if (whereToLookFor[i].first == whatToLookFor)
+			return i;
+	}
+	return -1;
+}
+
+void GUIMyFrame1::animate()
+{
+	if (selectedFrame == 0) {
+		setSlidersPosition(framesConfig[0].second);
+	}
+	int amountOfFrames = wxAtoi(m_amountOfFramesText->GetValue());
+	if (selectedFrame < amountOfFrames) {
+		for (int i = 0; i < sliders.size(); i++) {
+			int currentValue = sliders[i]->GetValue();
+			sliders[i]->SetValue(currentValue + animationVector[selectedFrame][i]);
+		}
+		selectedFrame++;
+	}
+	else {
+		if (m_repeatCheckBox->IsChecked()) {
+			selectedFrame = 0;
+		}
+	}
+}
+
+void GUIMyFrame1::setSlidersPosition(std::vector<int> slidersValue)
+{
+	for (int i = 0; i < sliders.size(); i++) {
+		sliders[i]->SetValue(slidersValue[i]);
+	}
+}
+
+void GUIMyFrame1::drawForAnimation(wxClientDC& dcClient)
+{
+	wxBufferedDC dc(&dcClient);
+	PrepareDC(dc);
+	dc.Clear();
+	linesPosition.clear();
+	if (is_enableAnimation_clicked) {
+		m_saveFrameButton->Enable();
+		m_startAnimationButton->Enable();
+		m_startAnimationButton->Enable();
+		m_amountOfFramesText->Disable();
+		m_timeline_panel->SetBackgroundColour(wxColor(220, 220, 220));
+		int width, height;
+		m_timeline_panel->GetSize(&width, &height);
+		int amountOfFrames = wxAtoi(m_amountOfFramesText->GetValue());
+		if (amountOfFrames != 0 && amountOfFrames != NULL) {
+			float frameWidth = width / amountOfFrames;
+			dc.SetPen(wxPen(wxColor(255, 0, 0), 2));
+
+			for (int i = 1; i <= amountOfFrames; i++) {
+				dc.DrawLine(wxPoint(frameWidth * i, 0), wxPoint(frameWidth * i, height));
+				linesPosition.push_back(wxPoint(frameWidth * i, 0));
+			}
+			for (int i = 0; i < configurableFrames.size(); i++) {
+				int pom = configurableFrames[i];
+
+				if (find(savedFrames.begin(), savedFrames.end(), configurableFrames[i]) != savedFrames.end())
+					dc.SetBrush(wxBrush(wxColor(255, 0, 0)));
+				else
+					dc.SetBrush(wxBrush(wxColor(255, 255, 255)));
+
+				if (pom != 0) {
+					dc.DrawCircle(wxPoint(linesPosition[pom].x - frameWidth / 2, height / 2), frameWidth / 4);
+				}
+				else {
+					dc.DrawCircle(wxPoint(frameWidth / 2, height / 2), frameWidth / 4);
+				}
+			}
+		}
+	}
+	else {
+		m_timeline_panel->SetBackgroundColour(wxColor(100, 100, 100));
+		m_amountOfFramesText->Enable();
+		m_saveFrameButton->Disable();
+		m_startAnimationButton->Disable();
+		m_startAnimationButton->Disable();
+		configurableFrames.clear();
+		linesPosition.clear();
+		m_selectedFrameText->SetValue(wxString::Format(wxT("")));
 	}
 }
