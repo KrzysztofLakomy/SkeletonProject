@@ -36,58 +36,58 @@ MyFrame1( parent )
 
 void GUIMyFrame1::m_panel2OnLeftDown( wxMouseEvent& event )
 {
-start_point = event.GetPosition();
-is_panel_clicked = true;
-m_panel2->Refresh();
+    start_point = event.GetPosition();
+    is_panel_clicked = true;
+    m_panel2->Refresh();
 }
 
 void GUIMyFrame1::m_panel2OnLeftUp( wxMouseEvent& event )
 {
-start_point = wxPoint(0, 0);
-is_panel_clicked = false;
+    start_point = wxPoint(0, 0);
+    is_panel_clicked = false;
 }
 
 void GUIMyFrame1::m_panel2OnMotion( wxMouseEvent& event )
 {
-if (event.LeftIsDown()&& is_panel_clicked) {
-alpha = static_cast<double>(event.GetPosition().x) - static_cast<double>(start_point.x);
-beta = static_cast<double>(start_point.y) - static_cast<double>(event.GetPosition().y);
-}
-m_panel2->Refresh();
+    if (event.LeftIsDown()&& is_panel_clicked) {
+        alpha = static_cast<double>(event.GetPosition().x) - static_cast<double>(start_point.x);
+        beta = static_cast<double>(start_point.y) - static_cast<double>(event.GetPosition().y);
+    }
+    m_panel2->Refresh();
 }
 
 void GUIMyFrame1::m_panel2OnPaint( wxPaintEvent& event )
 {
-wxClientDC dcClient(m_panel2);
-m_panel2->Refresh();
-m_panel2->Update();
-draw(dcClient);
+    wxClientDC dcClient(m_panel2);
+    m_panel2->Refresh();
+    m_panel2->Update();
+    draw(dcClient);
 }
 
 void GUIMyFrame1::m_panel2OnUpdateUI( wxUpdateUIEvent& event )
 {
-wxClientDC dcClient(m_panel2);
-draw(dcClient);
+    wxClientDC dcClient(m_panel2);
+    draw(dcClient);
 }
 
 void GUIMyFrame1::m_button1OnButtonClick( wxCommandEvent& event )
 {
-m_left_forearm_slider->SetValue(0);
-m_right_forearm_slider->SetValue(0);
-m_left_arm_side_slider->SetValue(50);
-m_right_arm_side_slider->SetValue(50);
-m_left_arm_front_slider->SetValue(0);
-m_right_arm_front_slider->SetValue(0);
-m_left_tibia_slider->SetValue(0);
-m_right_tibia_slider->SetValue(0);
-m_left_thigh_side_slider->SetValue(0);
-m_right_thigh_side_slider->SetValue(0);
-m_left_thigh_front_slider->SetValue(50);
-m_right_thigh_front_slider->SetValue(50);
-m_middle_back_front_slider->SetValue(0);
-m_middle_back_side_slider->SetValue(50);
-m_lower_back_front_slider->SetValue(0);
-m_lower_back_side_slider->SetValue(50);
+    m_left_forearm_slider->SetValue(0);
+    m_right_forearm_slider->SetValue(0);
+    m_left_arm_side_slider->SetValue(50);
+    m_right_arm_side_slider->SetValue(50);
+    m_left_arm_front_slider->SetValue(0);
+    m_right_arm_front_slider->SetValue(0);
+    m_left_tibia_slider->SetValue(0);
+    m_right_tibia_slider->SetValue(0);
+    m_left_thigh_side_slider->SetValue(0);
+    m_right_thigh_side_slider->SetValue(0);
+    m_left_thigh_front_slider->SetValue(50);
+    m_right_thigh_front_slider->SetValue(50);
+    m_middle_back_front_slider->SetValue(0);
+    m_middle_back_side_slider->SetValue(50);
+    m_lower_back_front_slider->SetValue(0);
+    m_lower_back_side_slider->SetValue(50);
 }
 
 
