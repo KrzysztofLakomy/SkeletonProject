@@ -136,6 +136,7 @@ void GUIMyFrame1::onTimelinePaint(wxPaintEvent& event)
 	m_timeline_panel->Refresh();
 	m_timeline_panel->Update();
 	drawForAnimation(dcClientTimeline);
+
 }
 
 void GUIMyFrame1::onTimelineUpdate(wxUpdateUIEvent& event)
@@ -146,6 +147,7 @@ void GUIMyFrame1::onTimelineUpdate(wxUpdateUIEvent& event)
 
 void GUIMyFrame1::m_button1OnButtonClick(wxCommandEvent& event)
 {
+
 	reset();
 }
 
@@ -157,6 +159,7 @@ void GUIMyFrame1::onEnableAnimationClicked(wxCommandEvent& event)
 		m_enableAnimationButton->SetLabelText("Enable Animation");
 	else
 		m_enableAnimationButton->SetLabelText("Disable Animation");
+
 }
 
 void GUIMyFrame1::onSaveFrameConfigurationClicked(wxCommandEvent& event)
