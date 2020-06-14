@@ -82,6 +82,9 @@ class MyFrame1 : public wxFrame
 		wxCheckBox* m_repeatCheckBox;
 		wxButton* m_startAnimationButton;
 		wxButton* m_stopButton;
+		wxButton* m_saveAnimationToText;
+		wxButton* m_loadFromFile;
+		wxButton* m_saveAnimationToFileButton;
 		wxTimer m_animationTimer;
 
 		// Virtual event handlers, overide them in your derived class
@@ -98,12 +101,15 @@ class MyFrame1 : public wxFrame
 		virtual void onSaveFrameConfigurationClicked( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onStartAnimationButonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onStopButtonClick( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSaveToFileClicked( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onLoadFromFileAnimationButton( wxCommandEvent& event ) { event.Skip(); }
+		virtual void onSaveAnimationToFileButtonClick( wxCommandEvent& event ) { event.Skip(); }
 		virtual void onTimerTick( wxTimerEvent& event ) { event.Skip(); }
 
 
 	public:
 
-		MyFrame1( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 880,783 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		MyFrame1( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxEmptyString, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 879,843 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 
 		~MyFrame1();
 

@@ -49,12 +49,6 @@ GUIMyFrame1::GUIMyFrame1(wxWindow* parent)
 	sliders.push_back(m_middle_back_side_slider);
 	sliders.push_back(m_lower_back_front_slider);
 	sliders.push_back(m_lower_back_side_slider);
-
-	if (m_pLogFile == NULL)
-	{
-		m_pLogFile = fopen("log.txt", "w+");
-		delete wxLog::SetActiveTarget(new wxLogStderr(m_pLogFile));
-	}
 }
 
 void GUIMyFrame1::m_panel2OnLeftDown(wxMouseEvent& event)
@@ -136,7 +130,6 @@ void GUIMyFrame1::onTimelinePaint(wxPaintEvent& event)
 	m_timeline_panel->Refresh();
 	m_timeline_panel->Update();
 	drawForAnimation(dcClientTimeline);
-
 }
 
 void GUIMyFrame1::onTimelineUpdate(wxUpdateUIEvent& event)
@@ -147,7 +140,6 @@ void GUIMyFrame1::onTimelineUpdate(wxUpdateUIEvent& event)
 
 void GUIMyFrame1::m_button1OnButtonClick(wxCommandEvent& event)
 {
-
 	reset();
 }
 
@@ -169,7 +161,123 @@ void GUIMyFrame1::onSaveFrameConfigurationClicked(wxCommandEvent& event)
 
 void GUIMyFrame1::onStartAnimationButonClick(wxCommandEvent& event)
 {
-	if(framesConfig.size() >0){
+	prepareAndStartAnimation();
+}
+
+void GUIMyFrame1::onStopButtonClick(wxCommandEvent& event)
+{
+	is_startAnimation_clicked = false;
+	m_animationTimer.Stop();
+}
+
+void GUIMyFrame1::onSaveToFileClicked(wxCommandEvent& event)
+{
+	wxFileDialog saveFileDialog = new wxFileDialog(this, _("Choose a file:"), _(""), _(""), "Csv files (*.csv)|*.csv", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+	if (saveFileDialog.ShowModal() == wxID_CANCEL) {
+		return;
+	}
+	wxTextFile tfile;
+	tfile.Open(saveFileDialog.GetPath());
+	tfile.AddLine("KTM " + m_amountOfFramesText->GetValue());
+	for (int i = 0; i < framesConfig.size(); i++) {
+		for (int j = 0; j < framesConfig[i].second.size(); j++) {
+			tfile.AddLine(wxString::Format(wxT("%i %i"), framesConfig[i].first, framesConfig[i].second[j]));
+		}
+	}
+
+	tfile.Write();
+	tfile.Close();
+
+}
+
+void GUIMyFrame1::onLoadFromFileAnimationButton(wxCommandEvent& event)
+{
+	wxFileDialog openFileDialog = new wxFileDialog(this, _("Choose a file:"), _(""), _(""), "Csv files (*.csv)|*.csv", wxFD_SAVE);
+	if (openFileDialog.ShowModal() == wxID_CANCEL) {
+		return;
+	}
+	wxTextFile tfile;
+	tfile.Open(openFileDialog.GetPath());
+
+	wxString str = tfile.GetFirstLine();
+	wxArrayString arrayString = wxSplit(str, wxChar(' '));
+	int size = arrayString.size();
+	if (arrayString.size() == 2 && arrayString[0] == wxString("KTM")) {
+		m_amountOfFramesText->SetValue(arrayString[1]);
+		framesConfig.clear();
+		configurableFrames.clear();
+		savedFrames.clear();
+		int frameNumber = -1;
+		int licznik = 0;
+		std::vector<int> vectorToChange;
+		while (!tfile.Eof())
+		{
+			str = tfile.GetNextLine();
+			arrayString = wxSplit(str, wxChar(' '));
+			licznik++;
+			if (arrayString.size() == 2) {
+				if (frameNumber == -1) {
+					frameNumber = wxAtoi(arrayString[0]);
+					configurableFrames.push_back(frameNumber);
+					savedFrames.push_back(frameNumber);
+				}
+				else if (frameNumber == wxAtoi(arrayString[0])) {
+					vectorToChange.push_back(wxAtoi(arrayString[1]));
+				}
+				else {
+					framesConfig.push_back(make_pair(frameNumber, vectorToChange));
+					vectorToChange.clear();
+					frameNumber = wxAtoi(arrayString[0]);
+					configurableFrames.push_back(frameNumber);
+					savedFrames.push_back(frameNumber);
+				}
+			
+			}
+		}
+
+		selectedFrame = 0;
+		is_startAnimation_clicked = true;
+		is_enableAnimation_clicked = true;
+		prepareAndStartAnimation();
+		m_enableAnimationButton->SetLabelText("Disable Animation");
+		wxMessageOutput::Get()->Printf("Animation loaded");
+	}
+	else {
+		wxMessageOutput::Get()->Printf("It is not data from our program!");
+	}
+
+
+
+
+	tfile.Close();
+
+}
+
+void GUIMyFrame1::onSaveAnimationToFileButtonClick(wxCommandEvent& event)
+{
+	imageArray.Clear();
+	wxDirDialog saveFileDialog = new wxDirDialog(this, _("Choose a directory:"));
+
+	if (saveFileDialog.ShowModal() == wxID_CANCEL) {
+		return;
+	}
+	else {
+		filePath = saveFileDialog.GetPath();
+		is_saveAnimationAsGif_clicked = true;
+		prepareAndStartAnimation();
+	}
+}
+
+void GUIMyFrame1::onTimerTick(wxTimerEvent& event)
+{
+	if (is_startAnimation_clicked)
+		animate();
+}
+
+
+void GUIMyFrame1::prepareAndStartAnimation()
+{
+	if (framesConfig.size() > 0) {
 		if (myFind(framesConfig, 0) == -1) {
 			reset();
 			selectedFrame = 0;
@@ -215,19 +323,6 @@ void GUIMyFrame1::onStartAnimationButonClick(wxCommandEvent& event)
 	}
 }
 
-void GUIMyFrame1::onStopButtonClick(wxCommandEvent& event)
-{
-	is_startAnimation_clicked = false;
-	m_animationTimer.Stop();
-}
-
-void GUIMyFrame1::onTimerTick(wxTimerEvent& event)
-{
-	if(is_startAnimation_clicked)
-		animate();
-}
-
-
 void GUIMyFrame1::reset()
 {
 	m_left_forearm_slider->SetValue(0);
@@ -248,6 +343,107 @@ void GUIMyFrame1::reset()
 	m_lower_back_side_slider->SetValue(50);
 }
 
+void GUIMyFrame1::drawForAnimation(wxClientDC& dcClient)
+{
+	wxBufferedDC dc(&dcClient);
+	PrepareDC(dc);
+	dc.Clear();
+	linesPosition.clear();
+	if (is_enableAnimation_clicked) {
+		m_saveFrameButton->Enable();
+		m_startAnimationButton->Enable();
+		m_stopButton->Enable();
+		m_amountOfFramesText->Disable();
+		m_saveAnimationToText->Enable();
+		m_saveAnimationToFileButton->Enable();
+		m_timeline_panel->SetBackgroundColour(wxColor(220, 220, 220));
+		int width, height;
+		m_timeline_panel->GetSize(&width, &height);
+		int amountOfFrames = wxAtoi(m_amountOfFramesText->GetValue());
+		if (amountOfFrames != 0 && amountOfFrames != NULL) {
+			float frameWidth = width / amountOfFrames;
+			dc.SetPen(wxPen(wxColor(255, 0, 0), 2));
+
+			for (int i = 1; i <= amountOfFrames; i++) {
+				dc.DrawLine(wxPoint(frameWidth * i, 0), wxPoint(frameWidth * i, height));
+				linesPosition.push_back(wxPoint(frameWidth * i, 0));
+			}
+			for (int i = 0; i < configurableFrames.size(); i++) {
+				int pom = configurableFrames[i];
+
+				if (find(savedFrames.begin(), savedFrames.end(), configurableFrames[i]) != savedFrames.end())
+					dc.SetBrush(wxBrush(wxColor(255, 0, 0)));
+				else
+					dc.SetBrush(wxBrush(wxColor(255, 255, 255)));
+
+				if (pom != 0) {
+					dc.DrawCircle(wxPoint(linesPosition[pom].x - frameWidth / 2, height / 2), frameWidth / 4);
+				}
+				else {
+					dc.DrawCircle(wxPoint(frameWidth / 2, height / 2), frameWidth / 4);
+				}
+			}
+		}
+	}
+	else {
+		m_timeline_panel->SetBackgroundColour(wxColor(100, 100, 100));
+		m_amountOfFramesText->Enable();
+		m_saveFrameButton->Disable();
+		m_saveAnimationToText->Disable();
+		m_startAnimationButton->Disable();
+		m_stopButton->Disable();
+		m_saveAnimationToFileButton->Disable();
+		configurableFrames.clear();
+		linesPosition.clear();
+		animationVector.clear();
+		m_selectedFrameText->SetValue(wxString::Format(wxT("")));
+	}
+}
+
+void GUIMyFrame1::saveAsGif()
+{
+	is_saveAnimationAsGif_clicked = false;
+	wxInitAllImageHandlers();
+	wxFileOutputStream* stream = new wxFileOutputStream(filePath);
+	wxGIFHandler gifHandler = wxGIFHandler();
+	if (gifHandler.SaveAnimation(imageArray, stream))
+		wxMessageOutput::Get()->Printf("It is saved");
+	else
+		wxMessageOutput::Get()->Printf("It is NOT saved");
+}
+
+void GUIMyFrame1::animate()
+{
+	if (animationVector.size() > 1) {
+		if (selectedFrame == 0) {
+			setSlidersPosition(framesConfig[0].second);
+		}
+		int amountOfFrames = wxAtoi(m_amountOfFramesText->GetValue());
+		if (selectedFrame < amountOfFrames) {
+			for (int i = 0; i < sliders.size(); i++) {
+				int currentValue = sliders[i]->GetValue();
+				sliders[i]->SetValue(currentValue + animationVector[selectedFrame][i]);
+			}
+			selectedFrame++;
+			m_selectedFrameText->SetValue(wxString::Format(wxT("%i"), selectedFrame));
+		}
+		else {
+			if (m_repeatCheckBox->IsChecked()) {
+				selectedFrame = 0;
+			}
+		}
+	}
+}
+
+int GUIMyFrame1::myFind(std::vector<std::pair<int, std::vector<int>>> whereToLookFor, int whatToLookFor)
+{
+	for (int i = 0; i < whereToLookFor.size(); i++) {
+		if (whereToLookFor[i].first == whatToLookFor)
+			return i;
+	}
+	return -1;
+}
+
 void GUIMyFrame1::saveSliders()
 {
 	std::vector<int> slidersValues;
@@ -260,6 +456,13 @@ void GUIMyFrame1::saveSliders()
 		framesConfig.push_back(make_pair(selectedFrame, slidersValues));
 	else
 		framesConfig[index].second = slidersValues;
+}
+
+void GUIMyFrame1::setSlidersPosition(std::vector<int> slidersValue)
+{
+	for (int i = 0; i < sliders.size(); i++) {
+		sliders[i]->SetValue(slidersValue[i]);
+	}
 }
 
 void GUIMyFrame1::draw(wxClientDC& dcClient)
@@ -961,102 +1164,27 @@ void GUIMyFrame1::draw(wxClientDC& dcClient)
 		cen = mat_vec_multiply(trans, cen);
 
 		dc.DrawCircle(cen.X(), cen.Y(), j.radius());
-
-		if (is_startAnimation_clicked) {
-			int amountOfFrames = wxAtoi(m_amountOfFramesText->GetValue());
-			m_animationTimer.Start(5000 / amountOfFrames, true);
-		}
 	}
-}
+	int amountOfFrames = wxAtoi(m_amountOfFramesText->GetValue());
+	if (is_startAnimation_clicked) {
+		m_animationTimer.Start(5000 / amountOfFrames, true);
+		if (is_saveAnimationAsGif_clicked) {
+			wxInitAllImageHandlers();
+			m_repeatCheckBox->SetValue(false);
+			if (selectedFrame % 5 == 0) {
+				if (imageArray.size() < amountOfFrames) {
+					wxSize panelToDrawSize = m_panel2->GetVirtualSize();
+					wxBitmap *bitMapToSave = new wxBitmap(panelToDrawSize);
 
-int GUIMyFrame1::myFind(std::vector<std::pair<int, std::vector<int>>> whereToLookFor, int whatToLookFor)
-{
-	for (int i = 0; i < whereToLookFor.size(); i++) {
-		if (whereToLookFor[i].first == whatToLookFor)
-			return i;
-	}
-	return -1;
-}
+					wxMemoryDC memoryDC;
+					memoryDC.SelectObject(*bitMapToSave);
+					memoryDC.Blit(0, 0, panelToDrawSize.GetX(), panelToDrawSize.GetY(), &dc, 0, 0, wxCOPY, true);
 
-void GUIMyFrame1::animate()
-{
-	if(animationVector.size() > 1){
-		if (selectedFrame == 0) {
-			setSlidersPosition(framesConfig[0].second);
-		}
-		int amountOfFrames = wxAtoi(m_amountOfFramesText->GetValue());
-		if (selectedFrame < amountOfFrames) {
-			for (int i = 0; i < sliders.size(); i++) {
-				int currentValue = sliders[i]->GetValue();
-				sliders[i]->SetValue(currentValue + animationVector[selectedFrame][i]);
-			}
-			selectedFrame++;
-			m_selectedFrameText->SetValue(wxString::Format(wxT("%i"), selectedFrame));
-		}
-		else {
-			if (m_repeatCheckBox->IsChecked()) {
-				selectedFrame = 0;
-			}
-		}
-	}
-}
+					wxImage result = bitMapToSave->ConvertToImage();
 
-void GUIMyFrame1::setSlidersPosition(std::vector<int> slidersValue)
-{
-	for (int i = 0; i < sliders.size(); i++) {
-		sliders[i]->SetValue(slidersValue[i]);
-	}
-}
-
-void GUIMyFrame1::drawForAnimation(wxClientDC& dcClient)
-{
-	wxBufferedDC dc(&dcClient);
-	PrepareDC(dc);
-	dc.Clear();
-	linesPosition.clear();
-	if (is_enableAnimation_clicked) {
-		m_saveFrameButton->Enable();
-		m_startAnimationButton->Enable();
-		m_stopButton->Enable();
-		m_amountOfFramesText->Disable();
-		m_timeline_panel->SetBackgroundColour(wxColor(220, 220, 220));
-		int width, height;
-		m_timeline_panel->GetSize(&width, &height);
-		int amountOfFrames = wxAtoi(m_amountOfFramesText->GetValue());
-		if (amountOfFrames != 0 && amountOfFrames != NULL) {
-			float frameWidth = width / amountOfFrames;
-			dc.SetPen(wxPen(wxColor(255, 0, 0), 2));
-
-			for (int i = 1; i <= amountOfFrames; i++) {
-				dc.DrawLine(wxPoint(frameWidth * i, 0), wxPoint(frameWidth * i, height));
-				linesPosition.push_back(wxPoint(frameWidth * i, 0));
-			}
-			for (int i = 0; i < configurableFrames.size(); i++) {
-				int pom = configurableFrames[i];
-
-				if (find(savedFrames.begin(), savedFrames.end(), configurableFrames[i]) != savedFrames.end())
-					dc.SetBrush(wxBrush(wxColor(255, 0, 0)));
-				else
-					dc.SetBrush(wxBrush(wxColor(255, 255, 255)));
-
-				if (pom != 0) {
-					dc.DrawCircle(wxPoint(linesPosition[pom].x - frameWidth / 2, height / 2), frameWidth / 4);
-				}
-				else {
-					dc.DrawCircle(wxPoint(frameWidth / 2, height / 2), frameWidth / 4);
+					result.SaveFile(filePath + "/" + wxString::Format(wxT("%i.jpg"), selectedFrame), wxBITMAP_TYPE_JPEG);
 				}
 			}
 		}
-	}
-	else {
-		m_timeline_panel->SetBackgroundColour(wxColor(100, 100, 100));
-		m_amountOfFramesText->Enable();
-		m_saveFrameButton->Disable(); 
-		m_startAnimationButton->Disable();
-		m_stopButton->Disable();
-		configurableFrames.clear();
-		linesPosition.clear();
-		animationVector.clear();
-		m_selectedFrameText->SetValue(wxString::Format(wxT("")));
 	}
 }

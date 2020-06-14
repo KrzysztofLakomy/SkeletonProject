@@ -217,13 +217,34 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	bSizer9 = new wxBoxSizer( wxHORIZONTAL );
 
 	m_startAnimationButton = new wxButton( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Start"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer9->Add( m_startAnimationButton, 0, wxALL, 5 );
+	bSizer9->Add( m_startAnimationButton, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 	m_stopButton = new wxButton( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Stop"), wxDefaultPosition, wxDefaultSize, 0 );
-	bSizer9->Add( m_stopButton, 0, wxALL, 5 );
+	bSizer9->Add( m_stopButton, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
 
 
 	sbSizer1->Add( bSizer9, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer101;
+	bSizer101 = new wxBoxSizer( wxHORIZONTAL );
+
+	m_saveAnimationToText = new wxButton( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Save to file"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer101->Add( m_saveAnimationToText, 0, wxALL, 5 );
+
+	m_loadFromFile = new wxButton( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Load from file"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer101->Add( m_loadFromFile, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	sbSizer1->Add( bSizer101, 1, wxEXPAND, 5 );
+
+	wxBoxSizer* bSizer11;
+	bSizer11 = new wxBoxSizer( wxVERTICAL );
+
+	m_saveAnimationToFileButton = new wxButton( sbSizer1->GetStaticBox(), wxID_ANY, wxT("Save to graphic files"), wxDefaultPosition, wxDefaultSize, 0 );
+	bSizer11->Add( m_saveAnimationToFileButton, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5 );
+
+
+	sbSizer1->Add( bSizer11, 1, wxEXPAND, 5 );
 
 
 	bSizer6->Add( sbSizer1, 1, wxEXPAND, 2 );
@@ -252,6 +273,9 @@ MyFrame1::MyFrame1( wxWindow* parent, wxWindowID id, const wxString& title, cons
 	m_saveFrameButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame1::onSaveFrameConfigurationClicked ), NULL, this );
 	m_startAnimationButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame1::onStartAnimationButonClick ), NULL, this );
 	m_stopButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame1::onStopButtonClick ), NULL, this );
+	m_saveAnimationToText->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame1::onSaveToFileClicked ), NULL, this );
+	m_loadFromFile->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame1::onLoadFromFileAnimationButton ), NULL, this );
+	m_saveAnimationToFileButton->Connect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame1::onSaveAnimationToFileButtonClick ), NULL, this );
 	this->Connect( wxID_ANY, wxEVT_TIMER, wxTimerEventHandler( MyFrame1::onTimerTick ) );
 }
 
@@ -271,6 +295,9 @@ MyFrame1::~MyFrame1()
 	m_saveFrameButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame1::onSaveFrameConfigurationClicked ), NULL, this );
 	m_startAnimationButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame1::onStartAnimationButonClick ), NULL, this );
 	m_stopButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame1::onStopButtonClick ), NULL, this );
+	m_saveAnimationToText->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame1::onSaveToFileClicked ), NULL, this );
+	m_loadFromFile->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame1::onLoadFromFileAnimationButton ), NULL, this );
+	m_saveAnimationToFileButton->Disconnect( wxEVT_COMMAND_BUTTON_CLICKED, wxCommandEventHandler( MyFrame1::onSaveAnimationToFileButtonClick ), NULL, this );
 	this->Disconnect( wxID_ANY, wxEVT_TIMER, wxTimerEventHandler( MyFrame1::onTimerTick ) );
 
 }
