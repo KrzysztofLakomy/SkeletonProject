@@ -169,53 +169,62 @@ void GUIMyFrame1::onSaveFrameConfigurationClicked(wxCommandEvent& event)
 
 void GUIMyFrame1::onStartAnimationButonClick(wxCommandEvent& event)
 {
-	if (myFind(framesConfig, 0) == -1) {
-		reset();
+	if(framesConfig.size() >0){
+		if (myFind(framesConfig, 0) == -1) {
+			reset();
+			selectedFrame = 0;
+			saveSliders();
+		}
+		if (myFind(framesConfig, wxAtoi(m_amountOfFramesText->GetValue())) == -1) {
+			reset();
+			selectedFrame = wxAtoi(m_amountOfFramesText->GetValue());
+			saveSliders();
+		}
+		sort(framesConfig.begin(), framesConfig.end());
 		selectedFrame = 0;
-		saveSliders();
-	}
-	is_startAnimation_clicked = !is_startAnimation_clicked;
-	sort(framesConfig.begin(), framesConfig.end());
-	selectedFrame = 0;
-	std::vector<int> howToChange;
+		std::vector<int> howToChange;
 
-	int a = 0;
-	int b = 0;
-	for (int i = 0; i < framesConfig.size(); i++) {
-		howToChange.clear();
-		if (i == 0) {
-			for (int j = 0; j < framesConfig[i].second.size(); j++) {
-				a = (framesConfig[i].second[j] - sliders[j]->GetValue());
-				howToChange.push_back(a);
-			}
-			animationVector.push_back(howToChange);
-		}
-		else {
-			for (int j = 0; j < framesConfig[i].second.size(); j++) {
-				a = (framesConfig[i].second[j] - framesConfig[i - 1].second[j]);
-
-				if (a != 0) {
-					b = (framesConfig[i].first - framesConfig[i - 1].first);
-					howToChange.push_back(a / b);
+		int a = 0;
+		int b = 0;
+		for (int i = 0; i < framesConfig.size(); i++) {
+			howToChange.clear();
+			if (i == 0) {
+				for (int j = 0; j < framesConfig[i].second.size(); j++) {
+					a = (framesConfig[i].second[j] - sliders[j]->GetValue());
+					howToChange.push_back(a);
 				}
-				else {
-					howToChange.push_back(0);
+				animationVector.push_back(howToChange);
+			}
+			else {
+				for (int j = 0; j < framesConfig[i].second.size(); j++) {
+					a = (framesConfig[i].second[j] - framesConfig[i - 1].second[j]);
+
+					if (a != 0) {
+						b = (framesConfig[i].first - framesConfig[i - 1].first);
+						howToChange.push_back(a / b);
+					}
+					else {
+						howToChange.push_back(0);
+					}
 				}
 			}
+			for (int j = 0; j < b; j++)
+				animationVector.push_back(howToChange);
 		}
-		for (int j = 0; j < b; j++)
-			animationVector.push_back(howToChange);
+		is_startAnimation_clicked = !is_startAnimation_clicked;
 	}
 }
 
 void GUIMyFrame1::onStopButtonClick(wxCommandEvent& event)
 {
+	is_startAnimation_clicked = false;
 	m_animationTimer.Stop();
 }
 
 void GUIMyFrame1::onTimerTick(wxTimerEvent& event)
 {
-	animate();
+	if(is_startAnimation_clicked)
+		animate();
 }
 
 
@@ -971,20 +980,23 @@ int GUIMyFrame1::myFind(std::vector<std::pair<int, std::vector<int>>> whereToLoo
 
 void GUIMyFrame1::animate()
 {
-	if (selectedFrame == 0) {
-		setSlidersPosition(framesConfig[0].second);
-	}
-	int amountOfFrames = wxAtoi(m_amountOfFramesText->GetValue());
-	if (selectedFrame < amountOfFrames) {
-		for (int i = 0; i < sliders.size(); i++) {
-			int currentValue = sliders[i]->GetValue();
-			sliders[i]->SetValue(currentValue + animationVector[selectedFrame][i]);
+	if(animationVector.size() > 1){
+		if (selectedFrame == 0) {
+			setSlidersPosition(framesConfig[0].second);
 		}
-		selectedFrame++;
-	}
-	else {
-		if (m_repeatCheckBox->IsChecked()) {
-			selectedFrame = 0;
+		int amountOfFrames = wxAtoi(m_amountOfFramesText->GetValue());
+		if (selectedFrame < amountOfFrames) {
+			for (int i = 0; i < sliders.size(); i++) {
+				int currentValue = sliders[i]->GetValue();
+				sliders[i]->SetValue(currentValue + animationVector[selectedFrame][i]);
+			}
+			selectedFrame++;
+			m_selectedFrameText->SetValue(wxString::Format(wxT("%i"), selectedFrame));
+		}
+		else {
+			if (m_repeatCheckBox->IsChecked()) {
+				selectedFrame = 0;
+			}
 		}
 	}
 }
@@ -1005,7 +1017,7 @@ void GUIMyFrame1::drawForAnimation(wxClientDC& dcClient)
 	if (is_enableAnimation_clicked) {
 		m_saveFrameButton->Enable();
 		m_startAnimationButton->Enable();
-		m_startAnimationButton->Enable();
+		m_stopButton->Enable();
 		m_amountOfFramesText->Disable();
 		m_timeline_panel->SetBackgroundColour(wxColor(220, 220, 220));
 		int width, height;
@@ -1039,11 +1051,12 @@ void GUIMyFrame1::drawForAnimation(wxClientDC& dcClient)
 	else {
 		m_timeline_panel->SetBackgroundColour(wxColor(100, 100, 100));
 		m_amountOfFramesText->Enable();
-		m_saveFrameButton->Disable();
+		m_saveFrameButton->Disable(); 
 		m_startAnimationButton->Disable();
-		m_startAnimationButton->Disable();
+		m_stopButton->Disable();
 		configurableFrames.clear();
 		linesPosition.clear();
+		animationVector.clear();
 		m_selectedFrameText->SetValue(wxString::Format(wxT("")));
 	}
 }
